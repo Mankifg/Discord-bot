@@ -1,6 +1,14 @@
 import discord
 from discord.ext import commands
 from random import randint
+import random
+import os
+
+fot = []
+path = os.getcwd()
+path.replace('\\', '/')
+with open(f"{path}/data/fot.txt", "r") as f:
+    fot.append(f.read())
 
 
 class HelpCog(commands.Cog, name="help command"):
@@ -68,6 +76,7 @@ class HelpCog(commands.Cog, name="help command"):
                     value=f"{commandName2.description}",
                     inline=False,
                 )
+                embed.set_footer(text=random.choice(fot))
                 await ctx.channel.send(embed=embed)
         else:
             embed = discord.Embed(
@@ -78,6 +87,7 @@ class HelpCog(commands.Cog, name="help command"):
             embed.set_thumbnail(url=f"{self.bot.user.avatar_url}")
             for i in self.bot.commands:
                 embed.add_field(name=i.name, value=i.description, inline=False)
+            embed.set_footer(text=random.choice(fot))
             await ctx.channel.send(embed=embed)
 
 

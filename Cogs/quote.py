@@ -2,9 +2,18 @@ import discord
 from discord.ext import commands
 import requests
 import json
+import os
+import random
 
 quote_url = "https://zenquotes.io/api/random"
 
+fot = []
+path = os.getcwd()
+path.replace('\\', '/')
+with open(f"{path}/data/fot.txt", "r") as f:
+    fot.append(f.read())
+
+fot.append("Powered by ZenQuotes.io | Made by Mankifg#1810")
 
 class QuoteCog(commands.Cog, name="quote command"):
     def __init__(self, bot: commands.bot):
@@ -17,7 +26,7 @@ class QuoteCog(commands.Cog, name="quote command"):
         json_data = json.loads(resp.text)
         quote = json_data[0]["q"] + " -" + json_data[0]["a"]
         q = discord.Embed(title="Quote", description=quote, color=discord.Color.random())
-        q.set_footer(text="Powered by ZenQuotes.io | Made by Mankifg#1810")
+        q.set_footer(text=random.choice(fot))
         await ctx.send(embed=q)
 
 

@@ -1,8 +1,15 @@
 import discord
 from discord.ext import commands
 import random
+import os
 
-fot = ["Powered by Random | Made by Mankifg#1810", "Requested by {} | Made by Mankifg#1810"]
+fot = []
+path = os.getcwd()
+path.replace('\\', '/')
+with open(f"{path}/data/fot.txt", "r") as f:
+    fot.append(f.read())
+
+fot.append("Powered by Random | Made by Mankifg#1810")
 
 class RandCog(commands.Cog, name="ping command"):
     def __init__(self, bot: commands.bot):

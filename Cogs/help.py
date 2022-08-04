@@ -23,7 +23,7 @@ class HelpCog(commands.Cog, name="help command"):
     )
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def help(self, ctx, commandName: str = None):
-
+        fot[0] = fot[0].replace("{}", ctx.author.name)
         commandName2 = None
         stop = False
 

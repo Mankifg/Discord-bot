@@ -3,13 +3,11 @@ from discord.ext import commands
 import json
 import os
 from dotenv import load_dotenv
-load_dotenv()
 
+load_dotenv()
 token = os.getenv('TOKEN')
 
-ABC = "hello"
 
-# Get configuration.json
 with open("configuration.json", "r") as config: 
 	data = json.load(config)
 	prefix = data["prefix"]
@@ -21,9 +19,9 @@ class Greetings(commands.Cog):
 		self.bot = bot
 		self._last_member = None
 
-# Intents
+
 intents = discord.Intents.default()
-# The bot
+
 bot = commands.Bot(
     command_prefix=prefix,
     help_command=None,
@@ -32,7 +30,7 @@ bot = commands.Bot(
     owner_id=owner_id,
 )
 
-# Load cogs
+
 if __name__ == '__main__':
 	for filename in os.listdir("Cogs"):
 		if filename.endswith(".py"):

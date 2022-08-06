@@ -9,8 +9,6 @@ import asyncio
 import os
 
 
-
-
 qttype = ["m", "tf"]
 qtc = ["multiple", "boolean"]
 
@@ -19,7 +17,7 @@ category_url = "https://opentdb.com/api_category.php"
 
 yes = "✅"
 no = "❌"
-leave = '🌑'
+leave = "🌑"
 
 
 numbers = ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
@@ -38,29 +36,47 @@ nine = numbers[9]
 fot = []
 
 path = os.getcwd()
-path.replace('\\', '/')
+path.replace("\\", "/")
 with open(f"{path}/data/fot.txt", "r") as f:
     fot.append(f.read())
 
-
 fot.append("Powered by OpenTDB.com | Made by Mankifg#1810")
-fot.append("If the answers are wrong, donit blame me. Blame OpenTDB.com. | Made by Mankifg#1810")
+fot.append(
+    "If the answers are wrong, donit blame me. Blame OpenTDB.com. | Made by Mankifg#1810"
+)
+
+special = []
+with open(f"{path}/data/special.txt", mode="r", encoding="utf-8") as f:
+    special = f.read().splitlines()
+
+a = []
+b = []
+
+for i, v in enumerate(special):
+    hold = v.split(",")
+    a.append(hold[0])
+    b.append(hold[1])
+
 
 class QuizCog(commands.Cog, name="ping command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
         bot = self.bot
-    
-    @commands.command(name="quiz", usage="", description="")
+
+    @commands.command(
+        name="quiz",
+        usage=" [q category = 8 < int < 31] [q type m - multiple, tf - true/false]",
+        description="",
+    )
     @commands.cooldown(1, 2, commands.BucketType.member)
-    async def quiz(self, ctx, category: int = None ,ttype: str = None):
+    async def quiz(self, ctx, category: int = None, ttype: str = None):
         fot[0] = fot[0].replace("{}", ctx.author.name)
 
         correct = 0
         incorrect = 0
 
         con = True
-        
+
         base = quiz_url
 
         if not category == None:
@@ -68,26 +84,28 @@ class QuizCog(commands.Cog, name="ping command"):
                 base += f"&category={category}"
             else:
                 resp = requests.get(category_url).json()
-                ret = ''
-                resp = resp['trivia_categories']
+                ret = ""
+                resp = resp["trivia_categories"]
                 for i in resp:
                     ret += f"{i['id']} - {i['name']}\n"
 
-                q = discord.Embed(title='Invalid category',color=discord.Color.red())
-                q.add_field(name='Valid categories', value=ret)
+                q = discord.Embed(title="Invalid category", color=discord.Color.red())
+                q.add_field(name="Valid categories", value=ret)
                 q.set_footer(text=random.choice(fot))
 
                 await ctx.send(embed=q)
 
                 return
 
-
         if not ttype == None:
             ttype = ttype.lower()
             if not ttype in qttype:
-                await ctx.send(
-                    "Your type was invalid. Plase use `m` (Multiple choice) or `tf` (True/False)"
-                )
+                q = discord.Embed(title="Invalid type", color=discord.Color.red())
+                q.add_field(name="Valid types", value="m - multiple\ntf - true/false")
+                q.set_footer(text=random.choice(fot))
+
+                await ctx.send(embed=q)
+
                 return
 
             ttype = qtc[qttype.index(ttype)]
@@ -103,15 +121,15 @@ class QuizCog(commands.Cog, name="ping command"):
 
             resp = resp["results"]
 
-            q = discord.Embed(title="Quiz", desciption="aa", color=discord.Color.blue())
+            q = discord.Embed(title="Quiz", desciption="", color=discord.Color.blue())
             q.add_field(name="Category", value=resp[0]["category"], inline=True)
             q.add_field(name="Level of Difficulty", value=resp[0]["difficulty"])
             q.add_field(name="Type", value=resp[0]["type"])
 
             question = resp[0]["question"]
-            question = question.replace("&quot;", "`")
-            question = question.replace("&#039;", "'")
 
+            for i in range(len(a)):
+                question = question.replace(a[i], b[i])
 
             q.add_field(name="Question", value=question)
 
@@ -127,6 +145,8 @@ class QuizCog(commands.Cog, name="ping command"):
                 ans = f"True of False."
                 corr = resp[0]["correct_answer"]
 
+            for i in range(len(a)):
+                ans = ans.replace(a[i], b[i])
             q.add_field(name="Answers", value=ans, inline=False)
             q.set_footer(text=random.choice(fot))
 
@@ -144,25 +164,23 @@ class QuizCog(commands.Cog, name="ping command"):
                     reaction, user = await self.bot.wait_for(
                         "reaction_add",
                         check=lambda reaction, user: user == ctx.author
-                        and reaction.emoji in [one,two,three,four,leave],
+                        and reaction.emoji in [one, two, three, four, leave],
                         timeout=30.0,
                     )
 
                 except asyncio.TimeoutError:
                     con = False
-                    
 
                 else:
                     if reaction.emoji == leave:
                         con = False
-                        await ctx.send('Ending')
+                        await ctx.send("Ending")
                         break
-                    
+
                     smart = False
                     for i in range(4):
                         if reaction.emoji == numbers[i] and corr == i:
                             smart = True
-
 
                     if smart:
                         await ctx.send("Correct.")
@@ -170,11 +188,10 @@ class QuizCog(commands.Cog, name="ping command"):
                         con = True
 
                     else:
-                        await ctx.send("Incorrect.")
+                        await ctx.send(f"{no}Incorrect{no}, correct answer was {corr}.")
                         incorrect = incorrect + 1
 
                         con = True
-
 
             else:
                 await add_r.add_reaction(yes)
@@ -185,13 +202,12 @@ class QuizCog(commands.Cog, name="ping command"):
                     reaction, user = await self.bot.wait_for(
                         "reaction_add",
                         check=lambda reaction, user: user == ctx.author
-                        and reaction.emoji in [yes, no,leave],
+                        and reaction.emoji in [yes, no, leave],
                         timeout=30.0,
                     )
 
                 except asyncio.TimeoutError:
                     con = False
-                    
 
                 else:
                     if reaction.emoji == leave:
@@ -210,11 +226,14 @@ class QuizCog(commands.Cog, name="ping command"):
                         con = True
 
         await ctx.channel.send("You ended the game")
-        await ctx.send(f"`{correct}` Correct, `{incorrect}` Incorrect and `{correct + incorrect}` completed.")
+        await ctx.send(
+            f"`{correct}` Correct, `{incorrect}` Incorrect and `{correct + incorrect}` completed."
+        )
         try:
-            await ctx.send(f'`{round(correct / (correct + incorrect) * 100, 2)}`% ')
+            await ctx.send(f"`{round(correct / (correct + incorrect) * 100, 2)}`% ")
         except DivisionByZero:
-            await ctx.send('You have zero answered questions.')
-        
+            await ctx.send("You have zero answered questions.")
+
+
 def setup(bot: commands.Bot):
     bot.add_cog(QuizCog(bot))

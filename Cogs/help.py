@@ -6,7 +6,7 @@ import os
 
 fot = []
 path = os.getcwd()
-path.replace('\\', '/')
+path.replace("\\", "/")
 with open(f"{path}/data/fot.txt", "r") as f:
     fot.append(f.read())
 

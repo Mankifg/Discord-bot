@@ -34,10 +34,7 @@ eight = numbers[8]
 nine = numbers[9]
 
 fot = []
-
-path = os.getcwd()
-path.replace("\\", "/")
-with open(f"{path}/data/fot.txt", "r") as f:
+with open(f"./data/fot.txt", "r") as f:
     fot.append(f.read())
 
 fot.append("Powered by OpenTDB.com | Made by Mankifg#1810")
@@ -46,7 +43,7 @@ fot.append(
 )
 
 special = []
-with open(f"{path}/data/special.txt", mode="r", encoding="utf-8") as f:
+with open(f"./data/special.txt", mode="r", encoding="utf-8") as f:
     special = f.read().splitlines()
 
 a = []
@@ -65,8 +62,8 @@ class QuizCog(commands.Cog, name="ping command"):
 
     @commands.command(
         name="quiz",
-        usage=" [q category = 8 < int < 31] [q type m - multiple, tf - true/false]",
-        description="",
+        usage=" [q category = 8 < int < 31] [q type m - multiple, tf - true/false]\n do quiz -1 for possible categories",
+        description="Quiz",
     )
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def quiz(self, ctx, category: int = None, ttype: str = None):

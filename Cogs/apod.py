@@ -34,7 +34,11 @@ class ApodCog(commands.Cog, name="ping command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 
-    @commands.command(name="apod", usage="", description="")
+    @commands.command(name="apod", 
+    usage=" for Astronaut Picture of The day", 
+    description="Astronaut Picture of The day by Nasa", 
+    alias=['Astronaut Picture of The day', 'APOD', 'apod']
+    )
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def apod(self, ctx):
         fot[0] = fot[0].replace("{}", ctx.author.name)

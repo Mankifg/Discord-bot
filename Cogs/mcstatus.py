@@ -26,7 +26,7 @@ class McstatusCog(commands.Cog, name="ping command"):
         #q.set_thumbnail(url=data["icon"])
 
 
-        q.add_field(name=f"Server name: " + data["hostname"], value=f"Hosted from: {data["ip"]}", inline=False)
+        #q.add_field(name=f"Server name: " + data["hostname"], value=f"Hosted from: {data["ip"]}", inline=False)
 
         q.add_field(name="Players", value=str(data["players"]["online"]) + "/" + str(data["players"]["max"]), inline=False)
         q.add_field(name="Version", value=data["version"], inline=False)

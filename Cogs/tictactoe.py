@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+import asyncio
 
 igralci = ['O', 'X']
 
@@ -115,16 +116,16 @@ def make_board(board):
 
     return ret
 
-def askforinput(user,channel,board):
-    for i in range(8):
-        if (board[i // 3][i % 3] == ' '):
-            print(i)
+def askforinput(user,channel,board,msg):
+    
+    
+    return 0
 
 class tictactoeCog(commands.Cog, name="ping command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 
-    @commands.command(name="tictactoe", usage="", description="wip")
+    @commands.command(name="tictactoe", usage="", description="wip", aliases=["ttt"])
     @commands.cooldown(1, 2, commands.BucketType.member)
 
     async def tictactoe(self, ctx):
@@ -132,6 +133,7 @@ class tictactoeCog(commands.Cog, name="ping command"):
         gamming = True
 
         user = ctx.author
+        username = ctx.author.name
         channel = ctx.channel
 
         board = [[' ', ' ', ' '],
@@ -139,24 +141,57 @@ class tictactoeCog(commands.Cog, name="ping command"):
             [' ', ' ', ' ']]
     
         while gamming:
-            await ctx.send(make_board(board))
+            q = discord.Embed(title='Tic Tac Toe', description='', color=discord.Color.random())
+            q.set_author(name=ctx.author.name, icon_url=user.avatar_url)
+            q.add_field(name='Board: ', value=f"**```{make_board(board)}```**", inline=False)
+
+            bsend = await ctx.send(embed=q)
+            
 
             ocena = oceniPolozaj(board)
 
             if (ocena == 10):
-                await ctx.send('You loose LLL')
-                return 0
+                q = discord.Embed(title='Tic Tac Toe', description='', color=discord.Color.random())
+                q.add_field(name='Winner: ', value=f"**```Computer```**", inline=False)
+                await ctx.send(embed=q)
+                gamming = False
+                return 
+
             elif(ocena == -10):
-                await ctx.send('You win')
-                return 0
+                q = discord.Embed(title='Tic Tac Toe', description='', color=discord.Color.random())
+                q.add_field(name="Winner: ", value=f'{user}', inline=False)
+
+                await ctx.send(embed=q)
+                gamming = False
+                return 
             
+           
             if (not preostalePoteze(board)):
                 await ctx.send('Draw')   
                 return 0
 
-            inp = askforinput(user,channel,board)
-            j = int(inp % 3)
-            i = int(inp / 3)
+            for i in range(9):
+                await bsend.add_reaction(numbers[i+1])
+
+            try:
+                reaction, user = await self.bot.wait_for(
+                    "reaction_add",
+                    check=lambda reaction, user: user == ctx.author
+                    and reaction.emoji in numbers,
+                    timeout=30.0,
+                )
+
+            except asyncio.TimeoutError:
+                gamming = False
+
+            else:
+                for i in range(9):
+                    if reaction.emoji == numbers[i+1]:
+                        place = i
+
+            
+            j = int(place % 3)
+            i = int(place / 3)
 
             board[i][j] = 'X'
 

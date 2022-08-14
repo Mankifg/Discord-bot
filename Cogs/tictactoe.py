@@ -6,6 +6,10 @@ igralci = ["O", "X"]
 
 numbers = ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
 
+yes = "✅"
+no = "❌"
+leave = "🌑"
+
 zero = numbers[0]
 one = numbers[1]
 two = numbers[2]
@@ -146,7 +150,6 @@ class tictactoeCog(commands.Cog, name="ping command"):
             while gamming:
                 good_answer = False
                 while not good_answer:
-
                     q = discord.Embed(
                         title="Tic Tac Toe",
                         description="",
@@ -163,12 +166,14 @@ class tictactoeCog(commands.Cog, name="ping command"):
 
                     for i in range(9):
                         await bsend.add_reaction(numbers[i + 1])
+                    
+                    await bsend.add_reaction(leave)
 
                     try:
                         reaction, user = await self.bot.wait_for(
                             "reaction_add",
                             check=lambda reaction, user: user == ctx.author
-                            and reaction.emoji in numbers,
+                            and (reaction.emoji in numbers or reaction.emoji == leave),
                             timeout=30.0,
                         )
 
@@ -177,6 +182,10 @@ class tictactoeCog(commands.Cog, name="ping command"):
                         break
 
                     else:
+                        if reaction.emoji == leave:
+                            await ctx.send(f"{ctx.author.name} left game **what a loser**!")
+                            return 0
+                    
                         for i in range(9):
                             if reaction.emoji == numbers[i + 1]:
                                 place = i
@@ -268,12 +277,14 @@ class tictactoeCog(commands.Cog, name="ping command"):
                         bsend = await ctx.send(embed=q)
                         for i in range(9):
                             await bsend.add_reaction(numbers[i + 1])
+                        
+                        await bsend.add_reaction(leave)
 
                         try:
                             reaction, user = await self.bot.wait_for(
                                 "reaction_add",
                                 check=lambda reaction, user: user == players[x]
-                                and reaction.emoji in numbers,
+                                and (reaction.emoji in numbers or reaction.emoji == leave),
                                 timeout=30.0,
                             )
 
@@ -281,6 +292,10 @@ class tictactoeCog(commands.Cog, name="ping command"):
                             gamming = False
 
                         else:
+                            if reaction.emoji == leave:
+                                await ctx.send(f"{players[x].name} left game **what a loser**!")
+                                return 0
+                            
                             found_place = False
                             for i in range(9):
                                 if reaction.emoji == numbers[i + 1]:

@@ -68,7 +68,7 @@ def minimax(polje, globina, jeMax):
         
         return naj
 
-    return naj
+    return 0
 
 def racunalnikPoteza(polje):
     najPostavitev = [-1, -1]
@@ -119,7 +119,7 @@ def main():
             print("Remi")    
             return 0
 
-        izbira = int(input("Vnesi polje za potezo: "))
+        izbira = int(input("Vnesi polje za potezo: ")) - 1
         j = int(izbira % 3)
         i = int(izbira / 3)
 

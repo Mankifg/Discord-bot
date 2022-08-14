@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 token = os.getenv('TOKEN')
 
-unwanted_files = ["exam.txt", "tictac.py"]
+unwanted_files = ["exam.txt"]
 
 with open("configuration.json", "r") as config: 
 	data = json.load(config)

@@ -7,7 +7,6 @@ import random
 import asyncio
 import os
 
-
 qttype = ["m", "tf"]
 qtc = ["multiple", "boolean"]
 

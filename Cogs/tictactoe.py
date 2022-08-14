@@ -4,23 +4,11 @@ import asyncio
 
 igralci = ["O", "X"]
 
-numbers = ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
+numbers = {1:"1️⃣", 2:"2️⃣", 3:"3️⃣", 4:"4️⃣", 5:"5️⃣", 6:"6️⃣", 7:"7️⃣", 8:"8️⃣", 9:"9️⃣"}
 
 yes = "✅"
 no = "❌"
 leave = "🌑"
-
-zero = numbers[0]
-one = numbers[1]
-two = numbers[2]
-three = numbers[3]
-four = numbers[4]
-five = numbers[5]
-six = numbers[6]
-seven = numbers[7]
-eight = numbers[8]
-nine = numbers[9]
-
 
 def preostalePoteze(board):
     for i in range(3):
@@ -113,6 +101,7 @@ def racunalnikPoteza(board):
                 board[i][j] = " "
 
     board[najPostavitev[0]][najPostavitev[1]] = "O"
+    del numbers[najPostavitev[0] * 3 + najPostavitev[1] + 1]
 
 
 def make_board(board):
@@ -138,6 +127,7 @@ class tictactoeCog(commands.Cog, name="ping command"):
     @commands.command(name="tictactoe", usage="", description="wip", aliases=["ttt"])
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def tictactoe(self, ctx, member: discord.Member = None):
+        global numbers
 
         gamming = True
 
@@ -164,8 +154,8 @@ class tictactoeCog(commands.Cog, name="ping command"):
 
                     bsend = await ctx.send(embed=q)
 
-                    for i in range(9):
-                        await bsend.add_reaction(numbers[i + 1])
+                    for key in numbers.keys():
+                        await bsend.add_reaction(numbers[key])
                     
                     await bsend.add_reaction(leave)
 
@@ -173,23 +163,26 @@ class tictactoeCog(commands.Cog, name="ping command"):
                         reaction, user = await self.bot.wait_for(
                             "reaction_add",
                             check=lambda reaction, user: user == ctx.author
-                            and (reaction.emoji in numbers or reaction.emoji == leave),
+                            and (reaction.emoji in numbers.values() or reaction.emoji == leave),
                             timeout=30.0,
                         )
 
                     except asyncio.TimeoutError:
                         gamming = False
+                        await ctx.send(f"{ctx.author.name} left game **what a loser**!")
                         break
 
                     else:
                         if reaction.emoji == leave:
                             await ctx.send(f"{ctx.author.name} left game **what a loser**!")
+                            numbers = {1:"1️⃣", 2:"2️⃣", 3:"3️⃣", 4:"4️⃣", 5:"5️⃣", 6:"6️⃣", 7:"7️⃣", 8:"8️⃣", 9:"9️⃣"}
                             return 0
                     
-                        for i in range(9):
-                            if reaction.emoji == numbers[i + 1]:
-                                place = i
+                        for key in numbers.keys():
+                            if reaction.emoji == numbers[key]:
+                                place = key - 1
 
+                    del numbers[place + 1]
                     j = int(place % 3)
                     i = int(place / 3)
 
@@ -213,6 +206,7 @@ class tictactoeCog(commands.Cog, name="ping command"):
                     )
                     await ctx.send(embed=q)
                     gamming = False
+                    numbers = {1:"1️⃣", 2:"2️⃣", 3:"3️⃣", 4:"4️⃣", 5:"5️⃣", 6:"6️⃣", 7:"7️⃣", 8:"8️⃣", 9:"9️⃣"}
                     return
 
                 elif ocena == -10:
@@ -225,10 +219,12 @@ class tictactoeCog(commands.Cog, name="ping command"):
 
                     await ctx.send(embed=q)
                     gamming = False
+                    numbers = {1:"1️⃣", 2:"2️⃣", 3:"3️⃣", 4:"4️⃣", 5:"5️⃣", 6:"6️⃣", 7:"7️⃣", 8:"8️⃣", 9:"9️⃣"}
                     return
 
                 if not preostalePoteze(board):
                     await ctx.send("Draw")
+                    numbers = {1:"1️⃣", 2:"2️⃣", 3:"3️⃣", 4:"4️⃣", 5:"5️⃣", 6:"6️⃣", 7:"7️⃣", 8:"8️⃣", 9:"9️⃣"}
                     return 0
 
                 if not preostalePoteze(board):
@@ -238,7 +234,7 @@ class tictactoeCog(commands.Cog, name="ping command"):
                     q.add_field(name="Draw", value=f"", inline=False)
                     await ctx.send(embed=q)
                     gamming = False
-
+                    numbers = {1:"1️⃣", 2:"2️⃣", 3:"3️⃣", 4:"4️⃣", 5:"5️⃣", 6:"6️⃣", 7:"7️⃣", 8:"8️⃣", 9:"9️⃣"}
                     return
 
                 racunalnikPoteza(board)
@@ -275,8 +271,8 @@ class tictactoeCog(commands.Cog, name="ping command"):
                         )
 
                         bsend = await ctx.send(embed=q)
-                        for i in range(9):
-                            await bsend.add_reaction(numbers[i + 1])
+                        for key in numbers.keys():
+                            await bsend.add_reaction(numbers[key])
                         
                         await bsend.add_reaction(leave)
 
@@ -284,35 +280,38 @@ class tictactoeCog(commands.Cog, name="ping command"):
                             reaction, user = await self.bot.wait_for(
                                 "reaction_add",
                                 check=lambda reaction, user: user == players[x]
-                                and (reaction.emoji in numbers or reaction.emoji == leave),
+                                and (reaction.emoji in numbers.values() or reaction.emoji == leave),
                                 timeout=30.0,
                             )
 
                         except asyncio.TimeoutError:
+                            await ctx.send(f"{players[x].name} left game **what a loser**!")
                             gamming = False
 
                         else:
                             if reaction.emoji == leave:
                                 await ctx.send(f"{players[x].name} left game **what a loser**!")
+                                numbers = {1:"1️⃣", 2:"2️⃣", 3:"3️⃣", 4:"4️⃣", 5:"5️⃣", 6:"6️⃣", 7:"7️⃣", 8:"8️⃣", 9:"9️⃣"}
                                 return 0
                             
                             found_place = False
-                            for i in range(9):
-                                if reaction.emoji == numbers[i + 1]:
+                            for key in numbers.keys():
+                                if reaction.emoji == numbers[key]:
                                     found_place = True
-                                    place = i
+                                    place = key - 1
 
                             if not found_place:
                                 await ctx.send("Invalid place")
+                                numbers = {1:"1️⃣", 2:"2️⃣", 3:"3️⃣", 4:"4️⃣", 5:"5️⃣", 6:"6️⃣", 7:"7️⃣", 8:"8️⃣", 9:"9️⃣"}
                                 return 0
 
                             j = int(place % 3)
                             i = int(place / 3)
 
                             if board[i][j] == " ":
-
                                 board[i][j] = igralci[x]
                                 good_answer = True
+                                del numbers[place + 1]
                                 break
                             else:
                                 continue
@@ -333,6 +332,7 @@ class tictactoeCog(commands.Cog, name="ping command"):
                         )
                         await ctx.send(embed=q)
                         gamming = False
+                        numbers = {1:"1️⃣", 2:"2️⃣", 3:"3️⃣", 4:"4️⃣", 5:"5️⃣", 6:"6️⃣", 7:"7️⃣", 8:"8️⃣", 9:"9️⃣"}
                         return
 
                     elif ocena == -10:
@@ -347,6 +347,7 @@ class tictactoeCog(commands.Cog, name="ping command"):
 
                         await ctx.send(embed=q)
                         gamming = False
+                        numbers = {1:"1️⃣", 2:"2️⃣", 3:"3️⃣", 4:"4️⃣", 5:"5️⃣", 6:"6️⃣", 7:"7️⃣", 8:"8️⃣", 9:"9️⃣"}
                         return
 
                     if not preostalePoteze(board):
@@ -358,9 +359,10 @@ class tictactoeCog(commands.Cog, name="ping command"):
                         q.add_field(name="Draw", value=f"remi", inline=False)
                         await ctx.send(embed=q)
                         gamming = False
-
+                        numbers = {1:"1️⃣", 2:"2️⃣", 3:"3️⃣", 4:"4️⃣", 5:"5️⃣", 6:"6️⃣", 7:"7️⃣", 8:"8️⃣", 9:"9️⃣"}
                         return
 
+        numbers = {1:"1️⃣", 2:"2️⃣", 3:"3️⃣", 4:"4️⃣", 5:"5️⃣", 6:"6️⃣", 7:"7️⃣", 8:"8️⃣", 9:"9️⃣"}
 
 def setup(bot: commands.Bot):
     bot.add_cog(tictactoeCog(bot))

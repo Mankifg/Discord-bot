@@ -124,7 +124,7 @@ class QuizCog(commands.Cog, name="ping command"):
             question = resp[0]["question"]
 
             for i in range(len(a)):
-                question = question.replace(a[i], b[i])
+                question = question.replace(b[i], a[i])
 
             q.add_field(name="Question", value=question)
 
@@ -134,6 +134,10 @@ class QuizCog(commands.Cog, name="ping command"):
             if resp[0]["type"] == "multiple":
                 random.shuffle(questions)
                 ans = f"1. {questions[0]},\n2. {questions[1]},\n3. {questions[2]},\n4. {questions[3]}."
+
+                for i in range(len(a)):
+                    ans = ans.replace(b[i], a[i])
+                    
                 corr = questions.index(resp[0]["correct_answer"]) + 1
 
             else:

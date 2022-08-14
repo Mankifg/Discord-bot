@@ -174,6 +174,7 @@ class tictactoeCog(commands.Cog, name="ping command"):
 
                     except asyncio.TimeoutError:
                         gamming = False
+                        break
 
                     else:
                         for i in range(9):

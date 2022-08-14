@@ -127,11 +127,6 @@ def make_board(board):
     return ret
 
 
-def askforinput(user, channel, board, msg):
-
-    return 0
-
-
 class tictactoeCog(commands.Cog, name="ping command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
@@ -228,7 +223,7 @@ class tictactoeCog(commands.Cog, name="ping command"):
 
                 if not preostalePoteze(board):
                     q = discord.Embed(
-                        title="Tic Tac Toe", description="", color=discord.Color.gray()
+                        title="Tic Tac Toe", description="", color=0x4a4a4a
                     )
                     q.add_field(name="Draw", value=f"", inline=False)
                     await ctx.send(embed=q)
@@ -342,9 +337,9 @@ class tictactoeCog(commands.Cog, name="ping command"):
                         q = discord.Embed(
                             title="Tic Tac Toe",
                             description="",
-                            color=discord.Color.gray(),
+                            color=0x4a4a4a,
                         )
-                        q.add_field(name="Draw", value=f"", inline=False)
+                        q.add_field(name="Draw", value=f"remi", inline=False)
                         await ctx.send(embed=q)
                         gamming = False
 

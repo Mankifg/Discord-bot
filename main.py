@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 token = os.getenv('TOKEN')
 
+unwanted_files = ["exam.txt", "tictac.py"]
 
 with open("configuration.json", "r") as config: 
 	data = json.load(config)
@@ -33,7 +34,7 @@ bot = commands.Bot(
 
 if __name__ == '__main__':
 	for filename in os.listdir("Cogs"):
-		if filename.endswith(".py"):
+		if filename.endswith(".py") and filename not in unwanted_files:
 			bot.load_extension(f"Cogs.{filename[:-3]}")
 
 @bot.event

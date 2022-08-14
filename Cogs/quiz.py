@@ -1,5 +1,4 @@
 from decimal import DivisionByZero
-from typing_extensions import Self
 import discord
 from discord.ext import commands
 import requests
@@ -7,7 +6,6 @@ import json
 import random
 import asyncio
 import os
-
 
 qttype = ["m", "tf"]
 qtc = ["multiple", "boolean"]

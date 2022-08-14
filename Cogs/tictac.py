@@ -68,7 +68,7 @@ def minimax(polje, globina, jeMax):
         
         return naj
 
-    return naj
+    return 0
 
 def racunalnikPoteza(polje):
     najPostavitev = [-1, -1]

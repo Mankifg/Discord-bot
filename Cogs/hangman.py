@@ -22,7 +22,11 @@ class hangmanCog(commands.Cog, name="ping command"):
             "\n```     _____\n    |/   |\n    |   (_)\n    |   /|\\\n    |    |\n    |   | |\n    |\n    |_______```\n"
             ]
 
-        all_words  = ['test', 'maricka', 'macka', 'test1', 'testiram']
+        all_words  = []
+        path = './data/words.txt'
+        with open(path, 'r') as f:
+            all_words = f.read().split('\n')
+        
         hidden = []
 
         wrong = 0

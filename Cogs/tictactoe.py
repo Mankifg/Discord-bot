@@ -244,6 +244,41 @@ class tictactoeCog(commands.Cog, name="ping command"):
 
             players = [ctx.author, member]
 
+            q = discord.Embed(
+                title="Accept Duel",
+                description="",
+                color=discord.Color.blue(),
+            )
+            q.set_author(
+                name=players[1].name, icon_url=players[1].avatar_url
+            )
+            q.add_field(
+                name="Accept: ",
+                value=f"```{member.name}```",
+                inline=False,
+            )
+
+            bsend = await ctx.send(embed=q)
+            await bsend.add_reaction(yes)
+            await bsend.add_reaction(no)
+
+            try:
+                reaction, user = await self.bot.wait_for(
+                    "reaction_add",
+                    check=lambda reaction, user: user == players[1]
+                    and (reaction.emoji == yes or reaction.emoji == no),
+                    timeout=30.0,
+                )
+
+            except asyncio.TimeoutError:
+                await ctx.send(f"**{players[1].name}** rejected duel!")
+                gamming = False
+            
+            else :
+                if (reaction.emoji == no) :
+                    await ctx.send(f"**{players[1].name}** rejected duel!")
+                    return
+
             while gamming:
                 for x in range(len(players)):
                     good_answer = False

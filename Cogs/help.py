@@ -5,10 +5,8 @@ import random
 import os
 
 fot = []
-path = os.getcwd()
-path.replace("\\", "/")
-with open(f"{path}/data/fot.txt", "r") as f:
-    fot.append(f.read())
+with open(f"./data/fot.txt", "r") as f:
+    fot = f.read().splitlines()
 
 
 class HelpCog(commands.Cog, name="help command"):
@@ -24,6 +22,7 @@ class HelpCog(commands.Cog, name="help command"):
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def help(self, ctx, commandName: str = None):
         fot[0] = fot[0].replace("{}", ctx.author.name)
+        fot[1] = fot[1].replace('{}', ctx.author.name)
         commandName2 = None
         stop = False
 

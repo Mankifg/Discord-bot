@@ -1,8 +1,14 @@
-from logging.config import IDENTIFIER
 import discord
 from discord.ext import commands
 import json
 import random
+
+
+fot = []
+with open('./data/fot.txt', 'r') as f:
+    fot = f.read().splitlines()
+
+
 
 pathToBank = './data/bank.json'
 
@@ -39,6 +45,8 @@ class balCog(commands.Cog, name="ping command"):
     @commands.command(name="bal", usage="", description="")
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def bal(self, ctx):
+        fot[0] = fot[0].replace("{}", ctx.author.name)
+        fot[1] = fot[1].replace('{}', ctx.author.name)
         create_account(ctx.author.id) 
 
         users = get_bank_data()
@@ -48,11 +56,14 @@ class balCog(commands.Cog, name="ping command"):
         q = discord.Embed(title="Balance", color=discord.Color.random())
         q.add_field(name="Wallet", value=wallet, inline=True)
         q.add_field(name="Bank", value=bank, inline=True)
+        q.set_footer(text=random.choice(fot))
         await ctx.send(embed=q)
     
     @commands.command(name="beg", usage="", description="")
     @commands.cooldown(1, 10, commands.BucketType.member)
     async def beg(self, ctx):
+        fot[0] = fot[0].replace("{}", ctx.author.name)
+        fot[1] = fot[1].replace('{}', ctx.author.name)
         create_account(ctx.author.id)
         
         users = get_bank_data()
@@ -61,9 +72,63 @@ class balCog(commands.Cog, name="ping command"):
 
         users[str(ctx.author.id)]['wallet'] += get_money
 
+        q = discord.Embed(title="Beg", color=discord.Color.random())
+        q.add_field(name="You got", value=get_money, inline=True)
+        q.set_footer(text=random.choice(fot))
+        await ctx.send(embed=q)
         
-        await ctx.send(f"You got {get_money}€.")
+        save_to_bank(users)
+
+    @commands.command(name="deposit", usage="", description="Deposit money into your bank account.", aliases=["d","D","dep"])
+    @commands.cooldown(1, 2, commands.BucketType.member)
+    async def deposit(self, ctx, amount: int):
+        fot[0] = fot[0].replace("{}", ctx.author.name)
+        fot[1] = fot[1].replace('{}', ctx.author.name)
+        create_account(ctx.author.id)
+        
+        users = get_bank_data()
+        if users[str(ctx.author.id)]['wallet'] < amount:
+            q = discord.Embed(title="Error", color=discord.Color.red())
+            q.add_field(name="You don't have enough money", value=f"You nead {amount - users[str(ctx.author.id)]['wallet']} more.", inline=True)
+            q.set_footer(text=random.choice(fot))
+            await ctx.send(embed=q)
+            
+        else:
+            users[str(ctx.author.id)]['wallet'] -= amount
+            users[str(ctx.author.id)]['bank'] += amount
+            q = discord.Embed(title="Transaction", color=discord.Color.random())
+            q.add_field(name="You deposited", value=f"{amount} into bank", inline=False)
+            q.add_field(name="Wallet", value=users[str(ctx.author.id)]['wallet'], inline=True)
+            q.add_field(name="Bank", value=users[str(ctx.author.id)]['bank'], inline=True)
+            q.set_footer(text=random.choice(fot))
+            await ctx.send(embed=q)
+            
         save_to_bank(users)
     
+    @commands.command(name="withdraw", usage=" [amount]", description="Withdraw money from bank.", aliases=["w","W"])
+    @commands.cooldown(1, 2, commands.BucketType.member)
+    async def withdraw(self, ctx, amount: int):
+        fot[0] = fot[0].replace("{}", ctx.author.name)
+        fot[1] = fot[1].replace('{}', ctx.author.name)
+        create_account(ctx.author.id)
+        
+        users = get_bank_data()
+        if users[str(ctx.author.id)]['bank'] < amount:
+            q = discord.Embed(title="Error", color=discord.Color.red())
+            q.add_field(name="You don't have enough money", value=f"You nead {amount - users[str(ctx.author.id)]['bank']} more.", inline=True)
+            q.set_footer(text=random.choice(fot))
+            await ctx.send(embed=q)
+            
+        else:
+            users[str(ctx.author.id)]['bank'] -= amount
+            users[str(ctx.author.id)]['wallet'] += amount
+            q = discord.Embed(title="Transaction", color=discord.Color.random())
+            q.add_field(name="You withdrawed", value=f"{amount} from bank", inline=False)
+            q.add_field(name="Wallet", value=users[str(ctx.author.id)]['wallet'], inline=True)
+            q.add_field(name="Bank", value=users[str(ctx.author.id)]['bank'], inline=True)
+            q.set_footer(text=random.choice(fot))
+            await ctx.send(embed=q)
+            
+        save_to_bank(users)
 def setup(bot: commands.Bot):
     bot.add_cog(balCog(bot))

@@ -66,6 +66,7 @@ class QuizCog(commands.Cog, name="ping command"):
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def quiz(self, ctx, category: int = None, ttype: str = None):
         fot[0] = fot[0].replace("{}", ctx.author.name)
+        fot[1] = fot[1].replace('{}', ctx.author.name)
 
         correct = 0
         incorrect = 0

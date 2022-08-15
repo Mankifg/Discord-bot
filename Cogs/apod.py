@@ -9,11 +9,8 @@ import random
 website = "https://api.nasa.gov/planetary/apod"
 
 fot = []
-path = os.getcwd()
-path.replace("\\", "/")
-
-with open(f"{path}/data/fot.txt", "r") as f:
-    fot.append(f.read())
+with open(f"./data/fot.txt", "r") as f:
+    fot = f.read().splitlines()
 
 fot.append("Powered by api.nasa.gov | Made by Mankifg#1810")
 
@@ -42,6 +39,7 @@ class ApodCog(commands.Cog, name="ping command"):
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def apod(self, ctx):
         fot[0] = fot[0].replace("{}", ctx.author.name)
+        fot[1] = fot[1].replace('{}', ctx.author.name)
         resp = requests.get(f"{website}?api_key={key}").json()
 
 

@@ -22,6 +22,7 @@ class QuoteCog(commands.Cog, name="quote command"):
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def quote(self, ctx):
         fot[0] = fot[0].replace("{}", ctx.author.name)
+        fot[1] = fot[1].replace('{}', ctx.author.name)
         resp = requests.get(quote_url)
         json_data = json.loads(resp.text)
         quote = json_data[0]["q"] + " -" + json_data[0]["a"]

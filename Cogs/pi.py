@@ -5,13 +5,11 @@ import math
 
 
 fot = []
-path = os.getcwd()
-path.replace("\\", "/")
-with open(f"{path}/data/fot.txt", "r") as f:
-    fot.append(f.read())
+with open(f"./data/fot.txt", "r") as f:
+    fot = f.read().splitlines()
 
 pi = []
-with open(f"{path}/data/pi.txt", "r") as f:
+with open(f"./data/pi.txt", "r") as f:
     pi = f.read()
 
 fot.append("Tibor made me do this | Made by Mankifg#1810")    
@@ -25,6 +23,9 @@ class PiCog(commands.Cog, name="ping command"):
     description="By using [p]pi s that give you")
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def pi(self, ctx, mode=None,num = None, num2 = None):
+        fot[0] = fot[0].replace("{}", ctx.author.name)
+        fot[1] = fot[1].replace('{}', ctx.author.name)
+
         try:
             num = int(num)
         except:
@@ -73,7 +74,7 @@ class PiCog(commands.Cog, name="ping command"):
         
 
 
-        fot[0] = fot[0].replace("{}", ctx.author.name)
+        
         
         
 def setup(bot: commands.Bot):

@@ -37,6 +37,7 @@ class RandCog(commands.Cog, name="ping command"):
             color=discord.Color.random(),
         )
         fot[0] = fot[0].replace("{}", ctx.author.name)
+        fot[1] = fot[1].replace('{}', ctx.author.name)
         q.set_footer(text=random.choice(fot))
         await ctx.send(embed=q)
 

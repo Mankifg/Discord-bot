@@ -6,10 +6,8 @@ import os
 import random
 
 fot = []
-path = os.getcwd()
-path.replace("\\", "/")
-with open(f"{path}/data/fot.txt", "r") as f:
-    fot.append(f.read())
+with open(f"./data/fot.txt", "r") as f:
+    fot = f.read().splitlines()
 
 fot.append("Powered by JokeAPI.dev | Made by Mankifg#1810")
 
@@ -25,9 +23,10 @@ class JokeCog(commands.Cog, name="joke command"):
     )
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def joke(self, ctx):
+        fot[0] = fot[0].replace("{}", ctx.author.name)
+        fot[1] = fot[1].replace('{}', ctx.author.name)
         joke = requests.get(joke_url).json()["joke"]
         q = discord.Embed(title="Joke", description=joke, color=discord.Color.random())
-        fot[0] = fot[0].replace("{}", ctx.author.name)
         q.set_footer(text=random.choice(fot))
         await ctx.send(embed=q)
 

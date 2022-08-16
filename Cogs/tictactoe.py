@@ -245,18 +245,16 @@ class tictactoeCog(commands.Cog, name="ping command"):
             players = [ctx.author, member]
 
             q = discord.Embed(
-                title="Accept Duel",
-                description="",
+                title="Tic Tac Toe Duel",
+                description=f"{players[0].name} vs {players[1].name}",
                 color=discord.Color.blue(),
             )
-            q.set_author(
-                name=players[1].name, icon_url=players[1].avatar_url
-            )
             q.add_field(
-                name="Accept: ",
-                value=f"```{member.name}```",
+                name="Challenger: ",
+                value=f"**```{players[0].name}```**",
                 inline=False,
             )
+            q.add_field(name="Challenged: ", value=f"**```{players[1].name}```**", inline=False)
 
             bsend = await ctx.send(embed=q)
             await bsend.add_reaction(yes)

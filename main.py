@@ -1,7 +1,9 @@
+from itertools import cycle
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 import json
 import os
+from itertools import cycle
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,6 +16,10 @@ with open("configuration.json", "r") as config:
 	prefix = data["prefix"]
 	owner_id = data["owner_id"]
 
+status = cycle(["Made by Mankifg#1810","Made by luka heric#9699", "Watching You", "m!help"])
+@tasks.loop(seconds=10)
+async def status_swap():
+    await bot.change_presence(activity=discord.Game(next(status)))
 
 class Greetings(commands.Cog):
 	def __init__(self, bot):
@@ -40,10 +46,6 @@ if __name__ == '__main__':
 @bot.event
 async def on_ready():
     print("We have logged in as {0.user}".format(bot))
-    await bot.change_presence(
-        activity=discord.Activity(
-            type=discord.ActivityType.watching, name=f"{bot.command_prefix}help"
-        )
-    )
+    status_swap.start()
 
 bot.run(token)

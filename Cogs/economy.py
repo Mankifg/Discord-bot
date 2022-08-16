@@ -130,5 +130,39 @@ class balCog(commands.Cog, name="ping command"):
             await ctx.send(embed=q)
             
         save_to_bank(users)
+
+    @commands.command(name="transfer", usage=" @user [amount]", description="Transfer money to another user.", aliases=["t","T"])
+    @commands.cooldown(1, 2, commands.BucketType.member)
+    async def transfer(self, ctx, user: discord.Member, amount: int):
+        fot[0] = fot[0].replace("{}", ctx.author.name)
+        fot[1] = fot[1].replace('{}', ctx.author.name)
+
+        create_account(ctx.author.id)
+        create_account(user.id)
+        
+        users = get_bank_data()
+        if ctx.author.id == user.id:
+            q = discord.Embed(title="Error", color=discord.Color.red())
+            q.add_field(name="You can't transfer to yourself", value=f"You have no friends", inline=True)
+            q.set_footer(text=random.choice(fot))
+            await ctx.send(embed=q)
+
+        if users[str(ctx.author.id)]['wallet'] < amount:
+            q = discord.Embed(title="Error", color=discord.Color.red())
+            q.add_field(name="You don't have enough money", value=f"You nead {amount - users[str(ctx.author.id)]['wallet']} more.", inline=True)
+            q.set_footer(text=random.choice(fot))
+            await ctx.send(embed=q)
+        else:
+            users[str(ctx.author.id)]['wallet'] -= amount
+            users[str(user.id)]['wallet'] += amount
+            q = discord.Embed(title="Transaction", color=discord.Color.random())
+            q.add_field(name="You transferred", value=f"**{amount}** to {user.mention}", inline=False)
+            q.add_field(name="Wallet", value=users[str(ctx.author.id)]['wallet'], inline=True)
+            q.add_field(name="Bank", value=users[str(ctx.author.id)]['bank'], inline=True)
+            q.set_footer(text=random.choice(fot))
+            await ctx.send(embed=q)
+        
+
+
 def setup(bot: commands.Bot):
     bot.add_cog(balCog(bot))

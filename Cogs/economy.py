@@ -3,12 +3,9 @@ from discord.ext import commands
 import json
 import random
 
-
 fot = []
 with open('./data/fot.txt', 'r') as f:
     fot = f.read().splitlines()
-
-
 
 pathToBank = './data/bank.json'
 
@@ -36,28 +33,39 @@ def create_account(id):
 
     return 
 
-    
+def change(id):
+    return 
 
-class balCog(commands.Cog, name="ping command"):
+
+class economyCog(commands.Cog, name="ping command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 
-    @commands.command(name="bal", usage="", description="")
+    @commands.command(name="bal", usage=" @username", description="")
     @commands.cooldown(1, 2, commands.BucketType.member)
-    async def bal(self, ctx):
+    async def bal(self, ctx, check: discord.Member = None):
         fot[0] = fot[0].replace("{}", ctx.author.name)
         fot[1] = fot[1].replace('{}', ctx.author.name)
-        create_account(ctx.author.id) 
 
+        create_account(ctx.author.id) 
         users = get_bank_data()
-        user = users[str(ctx.author.id)]
-        wallet = user['wallet']
-        bank = user['bank']
-        q = discord.Embed(title="Balance", color=discord.Color.random())
-        q.add_field(name="Wallet", value=wallet, inline=True)
-        q.add_field(name="Bank", value=bank, inline=True)
-        q.set_footer(text=random.choice(fot))
+
+        if check == None:
+            user = users[str(ctx.author.id)]
+            q = discord.Embed(title=f"Balance {user['wallet'] + int(user['bank'])}", color=discord.Color.random())
+            q.add_field(name="Wallet", value=user['wallet'], inline=True)
+            q.add_field(name="Bank", value=user['bank'], inline=True)
+            q.set_footer(text=random.choice(fot))
+        else:
+            create_account(check.id)
+            user = users[str(check.id)]
+            q = discord.Embed(title=f"Balance **{check}** {user['wallet'] + int(user['bank'])}", color=discord.Color.random())
+            q.add_field(name="Wallet", value=user['wallet'], inline=True)
+            q.add_field(name="Bank", value=user['bank'], inline=True)
+            q.set_footer(text=random.choice(fot))
+        
         await ctx.send(embed=q)
+        
     
     @commands.command(name="beg", usage="", description="")
     @commands.cooldown(1, 10, commands.BucketType.member)
@@ -131,9 +139,9 @@ class balCog(commands.Cog, name="ping command"):
             
         save_to_bank(users)
 
-    @commands.command(name="transfer", usage=" @user [amount]", description="Transfer money to another user.", aliases=["t","T"])
+    @commands.command(name="pay", usage=" @user [amount]", description="Transfer money to another user.", aliases=["p","P"])
     @commands.cooldown(1, 2, commands.BucketType.member)
-    async def transfer(self, ctx, user: discord.Member, amount: int):
+    async def pay(self, ctx, user: discord.Member, amount: int):
         fot[0] = fot[0].replace("{}", ctx.author.name)
         fot[1] = fot[1].replace('{}', ctx.author.name)
 
@@ -161,8 +169,34 @@ class balCog(commands.Cog, name="ping command"):
             q.add_field(name="Bank", value=users[str(ctx.author.id)]['bank'], inline=True)
             q.set_footer(text=random.choice(fot))
             await ctx.send(embed=q)
-        
 
+    @commands.command(name="top", usage="", description="Gives you top 10 users.", aliases=[])
+    @commands.cooldown(1, 2, commands.BucketType.member)
+    async def top(self, ctx,):
+        fot[0] = fot[0].replace("{}", ctx.author.name)
+        fot[1] = fot[1].replace('{}', ctx.author.name)
+        create_account(ctx.author.id)
+        all_bal = []
+        users = []
+        data = get_bank_data()
+
+        for i in data:
+            print(i)
+            all_bal.append(data[i]['wallet'] + int(data[i]['bank']))
+            users.append(i)
+        all_bal.sort(reverse=True)
+
+        loop = len(users)
+        if len(users) > 10:
+            loop = 10
+        
+        q = discord.Embed(title='Top 10 players', color=discord.Color.blue())
+        msg = ''
+        for i in range(loop):
+            msg = msg + '{}. {} == {}'.format(i+1,await self.bot.fetch_user(users[i]), all_bal[i]) + "\n"
+        q.add_field(name='Top 10 players', value=msg, inline=False)
+        q.set_footer(text=random.choice(fot))
+        await ctx.send(embed=q)
 
 def setup(bot: commands.Bot):
-    bot.add_cog(balCog(bot))
+    bot.add_cog(economyCog(bot))

@@ -52,8 +52,7 @@ class McstatusCog(commands.Cog, name="ping command"):
             toggles.append(yes)
         else:
             toggles.append(no)
-
-        print(toggles)
+            
         if data["online"]:
             q = discord.Embed(title="Server Status", description="", color=discord.Color.green())
             q.set_thumbnail(url=image_link + server)

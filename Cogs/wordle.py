@@ -66,40 +66,41 @@ class wordleCog(commands.Cog, name="ping command"):
             if not len(player) == 5:
                 await ctx.send(f"{player} is not a valid word.")
                 continue
-            colors = []
+            colors = ["","","","",""]
             out = ''
+            ponavljanje = {'a':0, 'b':0, 'c':0, 'd':0, 'e':0, 'f':0, 'g':0, 'h':0, 'i':0, 'j':0, 'k':0, 'l':0, 'm':0, 'n':0, 'o':0, 'p':0, 'q':0, 'r':0, 's':0, 't':0, 'u':0, 'v':0, 'w':0, 'x':0, 'y':0, 'z':0}
             if len(player) == 5:
-                round = round + 1
                 for i in range(len(player)):
-                    curr = player[:i]
                     if player[i] == word[i]:
-                        colors.append("g")
-                    elif player[i] in word and not player[i] == word[i]:
-                        colors.append("y")
-                    else:
-                        colors.append("r")
+                        colors[i] = 'g'
+                        out[i] = green(player[i]) + " "
+                        ponavljanje[player[i]] += 1
 
+                for i in range(len(player)):
+                    if player[i] in word and ponavljanje[player[i]] < word.count(player[i]):
+                        colors[i] = 'y'
+                        out[i] = yellow(player[i]) + " "
+                    elif player[i] != word[i]:
+                        colors[i] = 'r'
+                        out[i] = player[i] + " "
 
+            
                 save = ''
+
+
                 for i in range(len(colors)):
                     if colors[i] == "g":
                         save = save + green + " "
                     elif colors[i] == "y":
                         save = save + yellow + " "
                     else:
-                        save = save + red + " "
+                        save = save + gray + " "
 
                 await ctx.send(save)
                 a = a + 2
             else:
                 pass
 
-                
-            
-
-
-
-
-        
+                        
 def setup(bot: commands.Bot):
     bot.add_cog(wordleCog(bot))

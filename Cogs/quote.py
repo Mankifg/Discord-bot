@@ -9,7 +9,7 @@ quote_url = "https://zenquotes.io/api/random"
 
 fot = []
 with open(f"./data/fot.txt", "r") as f:
-    fot.append(f.read())
+    fot = f.read().splitlines()
 
 fot.append("Powered by ZenQuotes.io | Made by Mankifg#1810")
 

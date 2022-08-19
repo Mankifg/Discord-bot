@@ -1,5 +1,5 @@
 # Discord-bot
-My own Discord bot
+A multi purpuse discord bot cappabe of many commands. It uses some api and preform mosty interactive actions. It also include some classic games like: hangman, wordle, tictactoe (vs computer or player).
 
 # .ENV structure
 

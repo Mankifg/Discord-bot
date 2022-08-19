@@ -183,12 +183,12 @@ class QuizCog(commands.Cog, name="ping command"):
                             smart = True
 
                     if smart:
-                        await ctx.send("Correct.")
+                        await ctx.send(f"{yes} Correct. {yes}")
                         correct = correct + 1
                         con = True
 
                     else:
-                        await ctx.send(f"{no}Incorrect{no}, correct answer was {corr}.")
+                        await ctx.send(f"{no}Incorrect{no}")
                         incorrect = incorrect + 1
 
                         con = True
@@ -220,9 +220,8 @@ class QuizCog(commands.Cog, name="ping command"):
                         con = True
 
                     else:
-                        await ctx.send(f"{no}Incorrect{no}, correct answer was {corr}.")
+                        await ctx.send(f"{no}Incorrect{no}")
                         incorrect = incorrect + 1
-
                         con = True
 
         await ctx.channel.send("You ended the game")

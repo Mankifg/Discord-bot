@@ -2,6 +2,12 @@ import discord
 from discord.ext import commands
 import random
 
+fot = []
+with open('data/fot.txt', 'r') as f:
+    fot = f.read().splitlines()
+
+fot.append('Thanks TNT444#4444 for hangman figure')
+
 class hangmanCog(commands.Cog, name="ping command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
@@ -9,6 +15,8 @@ class hangmanCog(commands.Cog, name="ping command"):
     @commands.command(name="hangman", usage="", description="desc")
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def aa(self, ctx):
+        fot[0] = fot[0].replace("{}", ctx.author.name)
+        fot[1] = fot[1].replace('{}', ctx.author.name)
         hangman = [
             "",
             "\n```     _____\n    |/   |\n    |      \n    |      \n    |     \n    |      \n    |\n    |_______```\n",
@@ -38,7 +46,6 @@ class hangmanCog(commands.Cog, name="ping command"):
         for i in range(len(word)):
             hidden.append('_')
         
-        
         while True:
             attemp = attemp + 1
             message = ''
@@ -47,6 +54,7 @@ class hangmanCog(commands.Cog, name="ping command"):
             
             embed = discord.Embed(title="Hangman")
             embed.add_field(name= 'vislice', value=f"{hangman[wrong]}\n\nYou have {wrong} wrong guesses\n\nThis is your {attemp} attempt.\n\n```{message}```")
+            embed.set_footer(text=random.choice(fot))
             await ctx.send(embed=embed)
 
             msg = await self.bot.wait_for('message', check=lambda x: x.author.id == ctx.author.id)

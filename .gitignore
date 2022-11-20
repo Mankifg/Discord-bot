@@ -132,3 +132,4 @@ dmypy.json
 Cogs/__pycache__/
 ServerIcon.png
 data/bank.json
+Photos/apod.png

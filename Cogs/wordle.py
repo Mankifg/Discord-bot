@@ -55,7 +55,7 @@ class wordleCog(commands.Cog, name="ping command"):
             await ctx.send(embed=embed)
             
             msg = await self.bot.wait_for('message', 
-            check=lambda m: m.author == ctx.author)
+            check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
 
             player = msg.content.lower()
             

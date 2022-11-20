@@ -5,27 +5,14 @@ import json
 import requests
 from dotenv import load_dotenv, find_dotenv
 import random
+from functions import get_color
+import urllib.request
+
 
 website = "https://api.nasa.gov/planetary/apod"
 
-fot = []
-with open(f"./data/fot.txt", "r") as f:
-    fot = f.read().splitlines()
-
-fot.append("Powered by api.nasa.gov | Made by Mankifg#1810")
-
-
-
 load_dotenv(find_dotenv())
 key = os.getenv("NASA")
-
-if key == None:
-    key = ''
-    print('Please enter your key in .env file')
-    print('Example:\n NASA=************')
-    print('You can get your api here: https://api.nasa.gov/#signUp')
-    exit()
-
 
 class ApodCog(commands.Cog, name="ping command"):
     def __init__(self, bot: commands.bot):
@@ -34,14 +21,12 @@ class ApodCog(commands.Cog, name="ping command"):
     @commands.command(name="apod", 
     usage=" for Astronaut Picture of The day", 
     description="Astronaut Picture of The day by Nasa", 
-    alias=['Astronaut Picture of The day', 'APOD', 'apod']
+    alias=['APOD', 'apod']
     )
+
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def apod(self, ctx):
-        fot[0] = fot[0].replace("{}", ctx.author.name)
-        fot[1] = fot[1].replace('{}', ctx.author.name)
         resp = requests.get(f"{website}?api_key={key}").json()
-
 
         try:
             author = resp["copyright"]
@@ -58,14 +43,14 @@ class ApodCog(commands.Cog, name="ping command"):
         except:
             explain = explain
 
+        urllib.request.urlretrieve(pic_url, "./Photos/apod.png")
 
-        q = discord.Embed(title="Astronomy Picture of the Day", description='', color=discord.Color.random())
+        q = discord.Embed(title="Astronomy Picture of the Day", description='', color=get_color("./Photos/apod.png"))
         q.add_field(name="Title: " + title , value="Author: " + author, inline=True)
         q.set_image(url=pic_url)
         q.add_field(name="Date: " + date,value='Desc: ' + explain , inline=False)
-        q.set_footer(text=random.choice(fot))
+        q.set_footer(text="Using Nasa Api")
         await ctx.send(embed=q)
-
 
 def setup(bot: commands.Bot):
     bot.add_cog(ApodCog(bot))

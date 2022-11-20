@@ -9,7 +9,8 @@ from dotenv import load_dotenv
 load_dotenv()
 token = os.getenv('TOKEN')
 
-unwanted_files = ["exam.txt"]
+# TODO: GET links out of there asap
+unwanted_files = ["exam.txt","links.py"]
 
 with open("configuration.json", "r") as config: 
 	data = json.load(config)

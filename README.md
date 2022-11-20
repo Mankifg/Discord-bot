@@ -27,11 +27,10 @@ py main.py
 and bot should start.
 
 # Hosting
-Bot will be hosted on Heroku (i think). If you want to invite the bot click the [invite link](https://discord.com/api/oauth2/authorize?client_id=811338711048388708&permissions=137707912288&scope=bot)
+Bot will be hosted on Heroku (i think). If you want to invite the bot to your server click the [invite link](https://discord.com/api/oauth2/authorize?client_id=811338711048388708&permissions=137707912288&scope=bot)
 
 # Contributing
 If you have an idea or code to make this bot better please submit a [Pull Request here](https://github.com/Mankifg/DiscordBot/pulls)
 
 # Issues
 Same for issues if you find any issues submit it [here](https://github.com/Mankifg/DiscordBot/issues)
-

@@ -188,11 +188,19 @@ class economyCog(commands.Cog, name="ping command"):
         
         q = discord.Embed(title='Top 10 players', color=discord.Color.blue())
         msg = ''
+        max_str = 0
+        for i in range(loop):
+            c = await self.bot.fetch_user(users[i])
+            c = str(c)
+            if len(c) > max_str:
+                max_str = len(c)
+
         for i in range(loop):
             curr = await self.bot.fetch_user(users[i])
             curr = str(curr)
-            curr = curr + " " * (FIX_LEN - len(curr))
-            msg = msg + f"{i+1}. {curr} | {all_bal[i]}" + "\n"
+
+            msg = msg +f"{i+1}. {curr}  {' ' * (max_str - len(curr))} | {all_bal[i]}\n"
+            
         q.add_field(name='Top 10 players', value=f"```{msg}```", inline=False)
         await ctx.send(embed=q)
 

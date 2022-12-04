@@ -2,22 +2,7 @@ import discord
 from discord.ext import commands
 import random
 
-fot = []
-with open('data/fot.txt', 'r') as f:
-    fot = f.read().splitlines()
-
-fot.append('Thanks TNT444#4444 for hangman figure')
-
-class hangmanCog(commands.Cog, name="ping command"):
-    def __init__(self, bot: commands.bot):
-        self.bot = bot
-
-    @commands.command(name="hangman", usage="", description="desc")
-    @commands.cooldown(1, 2, commands.BucketType.member)
-    async def aa(self, ctx):
-        fot[0] = fot[0].replace("{}", ctx.author.name)
-        fot[1] = fot[1].replace('{}', ctx.author.name)
-        hangman = [
+hangman = [
             "",
             "\n```     _____\n    |/   |\n    |      \n    |      \n    |     \n    |      \n    |\n    |_______```\n",
             "\n```     _____\n    |/   |\n    |   ( )\n    |      \n    |     \n    |      \n    |\n    |_______```\n",
@@ -30,13 +15,20 @@ class hangmanCog(commands.Cog, name="ping command"):
             "\n```     _____\n    |/   |\n    |   (_)\n    |   /|\\\n    |    |\n    |   | |\n    |\n    |_______```\n"
             ]
 
-        all_words  = []
-        path = './data/words.txt'
-        with open(path, 'r') as f:
-            all_words = f.read().split('\n')
-        
-        hidden = []
+all_words  = []
+path = './data/words.txt'
+with open(path, 'r') as f:
+    all_words = f.read().split('\n')
 
+
+class hangmanCog(commands.Cog, name="ping command"):
+    def __init__(self, bot: commands.bot):
+        self.bot = bot
+
+    @commands.command(name="hangman", usage="", description="desc")
+    @commands.cooldown(1, 2, commands.BucketType.member)
+    async def hangman(self, ctx):
+        hidden = []
         wrong = 0
         attemp = 0
 
@@ -54,7 +46,6 @@ class hangmanCog(commands.Cog, name="ping command"):
             
             embed = discord.Embed(title="Hangman")
             embed.add_field(name= 'vislice', value=f"{hangman[wrong]}\n\nYou have {wrong} wrong guesses\n\nThis is your {attemp} attempt.\n\n```{message}```")
-            embed.set_footer(text=random.choice(fot))
             await ctx.send(embed=embed)
 
             msg = await self.bot.wait_for('message', check=lambda x: x.author.id == ctx.author.id)
@@ -74,11 +65,15 @@ class hangmanCog(commands.Cog, name="ping command"):
                 if hidden[a] == "_":
                     win = False
             if win:
-                await ctx.send(f'You competed game Hangman with word "{word}" in {attemp} atemmpts')
+                q = discord.Embed(title="You win.")
+                q.add_field(name=f"You guesses the word: {word} in {attemp} attempts.",value="_"*10)
+                await ctx.send(embed=q)
                 break
             
             if wrong == 9:
-                await ctx.send(f'You failed. > {word}')
+                q = discord.Embed(title="You lost")
+                q.add_field(name=f"The word was: {word}",value="_"*10)
+                await ctx.send(embed=q)
                 break
         
 def setup(bot: commands.Bot):

@@ -7,29 +7,23 @@ import random
 
 quote_url = "https://zenquotes.io/api/random"
 
-fot = []
-with open(f"./data/fot.txt", "r") as f:
-    fot = f.read().splitlines()
-
-fot.append("Powered by ZenQuotes.io | Made by Mankifg#1810")
-
-
 class QuoteCog(commands.Cog, name="quote command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 
-    @commands.command(name="quote", usage=" for random quote", description="Get's a random quote.")
+    @commands.command(name="quote", usage="", description="Get's a random quote.")
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def quote(self, ctx):
-        fot[0] = fot[0].replace("{}", ctx.author.name)
-        fot[1] = fot[1].replace('{}', ctx.author.name)
-        resp = requests.get(quote_url)
-        json_data = json.loads(resp.text)
-        quote = json_data[0]["q"] + " -" + json_data[0]["a"]
+        resp = requests.get(quote_url).json()
+        resp = resp[0]
+
+        quote = resp["q"]
         q = discord.Embed(
-            title="Quote", description=quote, color=discord.Color.random()
+            title=quote, color=discord.Color.random()
         )
-        q.set_footer(text=random.choice(fot))
+        q.add_field(name="by",value=resp["a"])
+
+        q.set_footer(text="Powered by ZenQuotes.io")
         await ctx.send(embed=q)
 
 

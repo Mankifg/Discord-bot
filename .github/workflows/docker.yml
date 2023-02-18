@@ -23,5 +23,5 @@ jobs:
         with:
           context: "."
           file: "./Dockerfile"
-          tags: ghcr.io/${{env.REPO}}:latest
+          tags: ghcr.io/${{env.REPO}}/mankifgbot:latest
           push: true

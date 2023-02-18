@@ -16,16 +16,12 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
           registry: "ghcr.io"
-      - name: Get Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: ghcr.io/${{ github.repository }}
-          tags: type=ref,event=tag
+      - name: Downcase repository owner
+        run: echo REPO=$(echo ${{github.repository_owner}} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
       - name: Build Docker image
         uses: docker/build-push-action@v2
         with:
+          context: "."
           file: "./Dockerfile"
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ghcr.io/${{env.REPO}}:latest
           push: true

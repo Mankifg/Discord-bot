@@ -2,7 +2,6 @@ from turtle import color
 import discord
 from discord.ext import commands
 import random
-from simple_colors import *
 
 fot = []
 with open("./data/fot.txt","r") as f:

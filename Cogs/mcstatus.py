@@ -20,7 +20,7 @@ for i in range(len(fot)):
 link = "https://api.mcsrvstat.us/2/"
 image_link = "https://eu.mc-api.net/v3/server/favicon/"
 
-class McstatusCog(commands.Cog, name="ping command"):
+class McstatusCog(commands.Cog, name="mcstatus command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 

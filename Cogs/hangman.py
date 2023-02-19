@@ -21,7 +21,7 @@ with open(path, 'r') as f:
     all_words = f.read().split('\n')
 
 
-class hangmanCog(commands.Cog, name="ping command"):
+class hangmanCog(commands.Cog, name="hangman command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 

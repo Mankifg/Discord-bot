@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 token = os.getenv('TOKEN')
 
-unwanted_files = ["exam.txt"]
+unwanted_files = ["exam.txt","wordle.py"]
 
 with open("configuration.json", "r") as config: 
 	data = json.load(config)

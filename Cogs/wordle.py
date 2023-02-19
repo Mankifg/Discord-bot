@@ -1,4 +1,3 @@
-from turtle import color
 import discord
 from discord.ext import commands
 import random
@@ -12,7 +11,7 @@ yellow_sq = "🟨"
 gray_sq = "🟥"
 LEN = 5
 
-class wordleCog(commands.Cog, name="ping command"):
+class wordleCog(commands.Cog, name="no command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 

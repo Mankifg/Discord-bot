@@ -1,5 +1,5 @@
 from itertools import cycle
-import discord
+import pycord
 from discord.ext import commands, tasks
 import json
 import os

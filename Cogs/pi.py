@@ -14,7 +14,7 @@ with open(f"./data/pi.txt", "r") as f:
 
 fot.append("Tibor made me do this | Made by Mankifg#1810")    
 
-class PiCog(commands.Cog, name="ping command"):
+class PiCog(commands.Cog, name="pi command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 

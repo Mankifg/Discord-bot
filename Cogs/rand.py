@@ -10,7 +10,7 @@ with open(f"./data/fot.txt", "r") as f:
 fot.append("Powered by Random | Made by Mankifg#1810")
 
 
-class RandCog(commands.Cog, name="ping command"):
+class RandCog(commands.Cog, name="rand command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 

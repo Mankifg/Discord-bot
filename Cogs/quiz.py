@@ -53,7 +53,7 @@ for i, v in enumerate(special):
     b.append(hold[1])
 
 
-class QuizCog(commands.Cog, name="ping command"):
+class QuizCog(commands.Cog, name="quiz command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
         bot = self.bot

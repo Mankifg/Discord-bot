@@ -11,7 +11,7 @@ yellow_sq = "🟨"
 gray_sq = "🟥"
 LEN = 5
 
-class wordleCog(commands.Cog, name="no command"):
+class wordleCog(commands.Cog, name="wordle command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 

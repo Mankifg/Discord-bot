@@ -120,7 +120,7 @@ def make_board(board):
     return ret
 
 
-class tictactoeCog(commands.Cog, name="ping command"):
+class tictactoeCog(commands.Cog, name="ttt command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 
@@ -145,7 +145,7 @@ class tictactoeCog(commands.Cog, name="ping command"):
                         description="",
                         color=discord.Color.random(),
                     )
-                    q.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
+                    q.set_author(name=ctx.author.name, icon_url=ctx.author.avatar.url)
                     q.add_field(
                         name="Board: ",
                         value=f"**```{make_board(board)}```**",
@@ -295,7 +295,7 @@ class tictactoeCog(commands.Cog, name="ping command"):
                                 color=discord.Color.blue(),
                             )
                         q.set_author(
-                            name=players[x].name, icon_url=players[x].avatar_url
+                            name=players[x].name, icon_url=players[x].avatar.url
                         )
                         q.add_field(
                             name="Board: ",

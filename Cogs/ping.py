@@ -3,7 +3,7 @@ from discord.ext import commands
 import time
 
 
-class PingCog(commands.Cog, name="ping command"):
+class PingCog(commands.Cog, name="pping command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 

@@ -32,7 +32,7 @@ def create_account(id):
 def change(id):
     return 
 
-class economyCog(commands.Cog, name="ping command"):
+class economyCog(commands.Cog, name="economy command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 

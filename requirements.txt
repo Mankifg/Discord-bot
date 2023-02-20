@@ -1,5 +1,5 @@
 aiosqlite==0.17.0
-discord.py
+pycord
 python-dotenv==0.20.0
 requests==2.27.1
 aiohttp>=3.8.0 # not directly required, pinned by Snyk to avoid a vulnerability

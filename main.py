@@ -6,6 +6,7 @@ import os
 from itertools import cycle
 from dotenv import load_dotenv
 
+
 load_dotenv()
 token = os.getenv('TOKEN')
 
@@ -28,7 +29,7 @@ class Greetings(commands.Cog):
 
 
 intents = discord.Intents.default()
-
+intents.message_content = True
 bot = commands.Bot(
     command_prefix=prefix,
     help_command=None,

@@ -1,5 +1,9 @@
 aiosqlite==0.17.0
-py-cord
+pycord
 python-dotenv==0.20.0
 requests==2.27.1
 aiohttp>=3.8.0 # not directly required, pinned by Snyk to avoid a vulnerability
+numpy==1.21.3
+Pillow==9.4.0
+PostBin==1.2.0
+scipy==1.8.0

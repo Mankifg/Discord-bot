@@ -6,6 +6,7 @@ import scipy.misc
 import scipy.cluster
 import discord
 import urllib
+
 NUM_CLUSTERS = 5
 
 def get_color(pic_path):

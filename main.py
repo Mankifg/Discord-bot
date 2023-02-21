@@ -5,7 +5,7 @@ import os
 from itertools import cycle
 from dotenv import load_dotenv
 import discord
-
+import startup
 
 
 load_dotenv()

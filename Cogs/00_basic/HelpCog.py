@@ -92,4 +92,3 @@ class HelpCog(commands.Cog, name="help command"):
 
 def setup(bot: commands.Bot):
     bot.remove_command("help")
-    bot.add_cog(HelpCog(bot))

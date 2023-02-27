@@ -32,7 +32,7 @@ class Greetings(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
-
+        
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -44,12 +44,7 @@ bot = commands.Bot(
     owner_id=owner_id,
 )
 
-
-for path in Path('./Cogs').rglob('*.py'):
-    print(path.name)
-
 if __name__ == '__main__':
-    #bot.load_extensions("Cogs.00_basic.HelpCog")
     for path in Path('./Cogs').rglob('*.py'):
         
         p = str(path)

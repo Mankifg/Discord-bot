@@ -6,6 +6,7 @@ import json
 import random
 import asyncio
 import os
+import functions
 
 qttype = ["m", "tf"]
 qtc = ["multiple", "boolean"]
@@ -31,15 +32,13 @@ seven = numbers[7]
 eight = numbers[8]
 nine = numbers[9]
 
-fot = []
-with open(f"./data/fot.txt", "r") as f:
-    fot.append(f.read())
 
+'''
 fot.append("Powered by OpenTDB.com | Made by Mankifg#1810")
 fot.append(
     "If the answers are wrong, donit blame me. Blame OpenTDB.com. | Made by Mankifg#1810"
 )
-
+'''
 special = []
 with open(f"./data/special.txt", mode="r", encoding="utf-8") as f:
     special = f.read().splitlines()
@@ -65,9 +64,6 @@ class QuizCog(commands.Cog, name="quiz command"):
     )
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def quiz(self, ctx, category: int = None, ttype: str = None):
-        fot[0] = fot[0].replace("{}", ctx.author.name)
-        fot[1] = fot[1].replace('{}', ctx.author.name)
-
         correct = 0
         incorrect = 0
 
@@ -87,7 +83,7 @@ class QuizCog(commands.Cog, name="quiz command"):
 
                 q = discord.Embed(title="Invalid category", color=discord.Color.red())
                 q.add_field(name="Valid categories", value=ret)
-                q.set_footer(text=random.choice(fot))
+                q.set_footer(text=functions.get_footer())
 
                 await ctx.send(embed=q)
 
@@ -98,7 +94,7 @@ class QuizCog(commands.Cog, name="quiz command"):
             if not ttype in qttype:
                 q = discord.Embed(title="Invalid type", color=discord.Color.red())
                 q.add_field(name="Valid types", value="m - multiple\ntf - true/false")
-                q.set_footer(text=random.choice(fot))
+                q.set_footer(text=functions.get_footer())
 
                 await ctx.send(embed=q)
 
@@ -148,7 +144,7 @@ class QuizCog(commands.Cog, name="quiz command"):
             for i in range(len(a)):
                 ans = ans.replace(a[i], b[i])
             q.add_field(name="Answers", value=ans, inline=False)
-            q.set_footer(text=random.choice(fot))
+            q.set_footer(text=functions.get_footer())
 
             add_r = await ctx.send(embed=q)
 

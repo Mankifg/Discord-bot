@@ -6,8 +6,15 @@ import scipy.misc
 import scipy.cluster
 import discord
 import urllib
+import json
+import random
 
 NUM_CLUSTERS = 5
+
+def read_json_file(path):
+    with open(path, 'r') as f:
+        return json.load(f)
+
 
 def get_color(pic_path):
     im = Image.open(pic_path)
@@ -51,9 +58,16 @@ def get_color_from_url(url):
     col = discord.Color(value=int(color, 16))
     return col
 
+def get_footer():
+    data = read_json_file('data/global_config.json')
+    footer = data["footers"]
+    return random.choice(footer)
+
 
 # for paste
 import postbin
 def mainSync(): 
     url = postbin.postSync(f"FooBar Bazz 2")
     print(f"Your paste is located at {url}")
+
+

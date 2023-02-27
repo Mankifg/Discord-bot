@@ -5,16 +5,10 @@ import random
 import os
 import requests
 import json
+import functions
 
 yes = "✅"
 no = "❌"
-
-fot = []
-with open("./data/fot.txt", "r") as f:
-    fot = f.read().splitlines()
-
-for i in range(len(fot)):
-    fot[i] = fot[i].replace("\n", "")
 
 
 link = "https://api.mcsrvstat.us/2/"
@@ -30,11 +24,6 @@ class McstatusCog(commands.Cog, name="mcstatus command"):
     )
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def mcstatus(self, ctx, server):
-    
-        fot[0] = fot[0].replace("{}", ctx.author.name)
-        fot[1] = fot[1].replace("{}", ctx.author.name)
-
-
         resp = requests.get(link + server).text
         data = json.loads(resp)
         
@@ -61,12 +50,11 @@ class McstatusCog(commands.Cog, name="mcstatus command"):
             q.add_field(name="Version", value=data["version"], inline=False)
             q.add_field(name="Motd", value=f"{data['motd']['clean'][0]}\n{data['motd']['clean'][1]}", inline=False)
             q.add_field(name='Settings', value=f"Ping: {toggles[0]}\nAllow query: {toggles[1]}\nAnimated motd: {toggles[2]}", inline=False)
-            q.set_footer(text=random.choice(fot))
+            q.set_footer(text=functions.get_footer())
         else:
             q = discord.Embed(title="Server Status", description="", color=discord.Color.red())
             q.add_field(name='Server is offline', value="", inline=False)
-            q.set_footer(text=random.choice(fot))
-
+            q.set_footer(text=functions.get_footer())
         await ctx.send(embed=q)
         
 

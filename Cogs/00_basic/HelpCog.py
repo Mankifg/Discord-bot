@@ -3,11 +3,7 @@ from discord.ext import commands
 from random import randint
 import random
 import os
-
-fot = []
-with open(f"./data/fot.txt", "r") as f:
-    fot = f.read().splitlines()
-
+import functions
 
 class HelpCog(commands.Cog, name="help command"):
     def __init__(self, bot: commands.Bot):
@@ -21,8 +17,6 @@ class HelpCog(commands.Cog, name="help command"):
     )
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def help(self, ctx, commandName: str = None):
-        fot[0] = fot[0].replace("{}", ctx.author.name)
-        fot[1] = fot[1].replace('{}', ctx.author.name)
         commandName2 = None
         stop = False
 
@@ -75,7 +69,7 @@ class HelpCog(commands.Cog, name="help command"):
                     value=f"{commandName2.description}",
                     inline=False,
                 )
-                embed.set_footer(text=random.choice(fot))
+                embed.set_footer(functions.get_footer())
                 await ctx.channel.send(embed=embed)
         else:
             embed = discord.Embed(
@@ -86,7 +80,7 @@ class HelpCog(commands.Cog, name="help command"):
             embed.set_thumbnail(url=f"{self.bot.user.avatar_url}")
             for i in self.bot.commands:
                 embed.add_field(name=i.name, value=i.description, inline=False)
-            embed.set_footer(text=random.choice(fot))
+            embed.set_footer(functions.get_footer())
             await ctx.channel.send(embed=embed)
 
 

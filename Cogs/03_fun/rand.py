@@ -2,12 +2,8 @@ import discord
 from discord.ext import commands
 import random
 import os
+import functions
 
-fot = []
-with open(f"./data/fot.txt", "r") as f:
-    fot.append(f.read())
-
-fot.append("Powered by Random | Made by Mankifg#1810")
 
 
 class RandCog(commands.Cog, name="rand command"):
@@ -36,9 +32,7 @@ class RandCog(commands.Cog, name="rand command"):
             description=f"{num}, range: {low} - {high}",
             color=discord.Color.random(),
         )
-        fot[0] = fot[0].replace("{}", ctx.author.name)
-        fot[1] = fot[1].replace('{}', ctx.author.name)
-        q.set_footer(text=random.choice(fot))
+        q.set_footer(text=functions.get_footer())
         await ctx.send(embed=q)
 
 

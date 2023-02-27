@@ -4,15 +4,10 @@ import os
 import math
 
 
-fot = []
-with open(f"./data/fot.txt", "r") as f:
-    fot = f.read().splitlines()
-
 pi = []
 with open(f"./data/pi.txt", "r") as f:
     pi = f.read()
-
-fot.append("Tibor made me do this | Made by Mankifg#1810")    
+ 
 
 class PiCog(commands.Cog, name="pi command"):
     def __init__(self, bot: commands.bot):
@@ -23,9 +18,6 @@ class PiCog(commands.Cog, name="pi command"):
     description="By using [p]pi s that give you")
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def pi(self, ctx, mode=None,num = None, num2 = None):
-        fot[0] = fot[0].replace("{}", ctx.author.name)
-        fot[1] = fot[1].replace('{}', ctx.author.name)
-
         try:
             num = int(num)
         except:

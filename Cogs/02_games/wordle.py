@@ -1,10 +1,8 @@
 import discord
 from discord.ext import commands
 import random
+import functions
 
-fot = []
-with open("./data/fot.txt","r") as f:
-    fot = f.read().splitlines()
 
 green_sq = "🟩"
 yellow_sq = "🟨" 
@@ -18,9 +16,6 @@ class wordleCog(commands.Cog, name="wordle command"):
     @commands.command(name="wordle", usage="", description="")
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def wordle(self, ctx):
-        fot[0] = fot[0].replace("{}", ctx.author.name)
-        fot[1] = fot[1].replace('{}', ctx.author.name)
-
         p = ctx.author.name
         word = "abcde"
         output = ["_ _ _ _ _ ",
@@ -46,11 +41,11 @@ class wordleCog(commands.Cog, name="wordle command"):
 
             display = f"```{display}```"
 
-            embed = discord.Embed(title=f"Wordle - Round {round}")
-            embed.add_field(name= "Wordle", value=f"{display}",inline=False)
-            embed.add_field(name='Enter world',value=p,inline=False)
-            embed.set_footer(text=random.choice(fot))
-            await ctx.send(embed=embed)
+            q = discord.Embed(title=f"Wordle - Round {round}")
+            q.add_field(name= "Wordle", value=f"{display}",inline=False)
+            q.add_field(name='Enter world',value=p,inline=False)
+            q.set_footer(text=functions.get_footer())
+            await ctx.send(embed=q)
             
             msg = await self.bot.wait_for('message', 
             check=lambda m: m.author == ctx.author and m.channel == ctx.channel)

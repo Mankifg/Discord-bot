@@ -49,6 +49,7 @@ if __name__ == '__main__':
         
         p = str(path)
         p = p.replace("\\",".")
+        p = p.replace("/",".")
         print(p)
         bot.load_extension(f"{p[:-3]}")
 

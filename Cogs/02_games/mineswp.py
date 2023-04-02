@@ -2,35 +2,49 @@ import discord
 from discord.ext import commands
 import random
 
-replaces = [
-    (".","⬛"),
-    ("0","⬜"),
-    ("1","🟩"),
-    ("2","🟨"),
-    ("3","🟧"),
-    ("4","🟥")    
-]
 
-def change(ret):
-    for i in range(len(replaces)):
-        ret = ret.replace(replaces[i][0],replaces[i][1])
-
-    return ret
-
-def nice_board(board):
+def nice_board(board,emojis):
     ret = ""
-    ret = f"{ret}{'-'*4*len(board)}\n"
+    l = len(board[0])
     for x in range(len(board)):
-        for y in range(len(board[x])):
-            ret = ret + f"| {board[x][y]} "
-        ret = ret + "|"
-
-        ret = ret + "\n"
-        ret = f"{ret}{'-'*4*len(board)}\n"
-    
-    ret = change(ret)
-    return ret
         
+        num = str(9 - int(x) % 10)
+        if num == "0":
+            num = "z"
+        ret += num
+        for y in range(l):
+            ret = ret + board[x][y]
+        ret = ret+"\n"
+
+    for i in range(len(board[0])):
+        num = str(int(i) % 10)
+        if num == "0":
+            num = "z"
+        ret = ret + num
+    
+    
+    
+    nret = ""
+    for i in range(len(ret)):
+        current = ret[i]
+        if str(current) in list(map(str,list(range(1,9)))):
+            #nret += emojis[f"{current}mine"]
+            nret += emojis[int(current)]
+        
+        elif str(current) == ".":
+            nret += "⬛"
+        elif str(current) == "0":
+            nret += "◻️"
+        elif str(current) == "z":
+            nret += "0️⃣"
+        elif str(current) == "9":
+            nret += "9️⃣"
+        else:
+            nret += current
+
+    
+    return nret
+
 def generate_board(w,h,):
     board = []
     for _ in range(h):
@@ -149,8 +163,13 @@ class mineswpCog(commands.Cog, name="mineswp command"):
     @commands.command(name="mineswp", usage="", description="desc",aliases=["mnswp","minesweeper"])
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def mineswp(self, ctx):
-    
-        h,w,mines = 9,9,10
+
+        # if there wasn't message limit
+        #emojis = {e.name:str(e) for e in ctx.bot.emojis}
+        emojis = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","0️⃣",]
+
+
+        h,w,mines = 10,10,5
 
         #! 
         mines = 5
@@ -163,10 +182,19 @@ class mineswpCog(commands.Cog, name="mineswp command"):
         hidden_board = generate_board(h,w)
 
         while True:
-            await ctx.send(f"```{nice_board(hidden_board)}```")
-            await ctx.send("Enter x and y separed with space >")
+            q = discord.Embed(title="Minesweeper", description="", colour=0x2f3136)
+            q.add_field(name="Board",value=f"{nice_board(hidden_board, emojis)}")
+            q.add_field(name=f"Enter x and y: ", value=f"Board: {h}x{w}, with {mines} mines", inline=False)
+            
+            
+            q.set_footer(text=f"{ctx.author.name}'s board | type stop to cancel")
+
+            await ctx.send(embed=q)
+
+
             msg = await self.bot.wait_for('message', check=lambda x: x.author.id == ctx.author.id)
             msg = msg.content.lower()
+
 
             if msg in ["stop","end","kill","exit"]:
                 await ctx.send("Stoped")
@@ -186,6 +214,8 @@ class mineswpCog(commands.Cog, name="mineswp command"):
                 await ctx.send("You died")
                 break
                 
+
+
 
         await ctx.send(m_board)
 

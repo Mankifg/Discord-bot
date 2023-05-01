@@ -36,7 +36,9 @@ class ApodCog(commands.Cog):
         self.send_message.start()
     @tasks.loop(seconds=59)
     async def send_message(self):
-        if datetime.now().strftime("%H:%M") == getTime():
+        print("cycle")
+        if datetime.now().hour == 8 and datetime.now().minute == 0:
+            print("aa")
             channels = getFile()["apod"]["ids"]
             resp = requests.get(f"{website}?api_key={key}").json()
             author = resp.get("copyright", "n/a")
@@ -44,9 +46,9 @@ class ApodCog(commands.Cog):
             explain = resp.get("explanation","n/a")
             pic_url = resp.get("url","https://i.redd.it/8w81b1pwk0d21.jpg")
             title = resp.get("title","n/a")
-            explain = explain[0:200] + "..." if len(explain) > 200 else explain
-            
             urllib.request.urlretrieve(pic_url, path_to_img)
+
+            explain = explain[0:200] + "..." if len(explain) > 200 else explain
 
             q = discord.Embed(title="Astronomy Picture of the Day", description='', color=get_color(path_to_img))
             q.add_field(name=f"Title: {title}", value=f"Author: {author}", inline=True)
@@ -57,8 +59,6 @@ class ApodCog(commands.Cog):
             for id in channels:
                 ch = self.bot.get_channel(id)
                 await ch.send(embed=q)
-            await asyncio.sleep(23*60*60) # number of second in 23 hours, i think it shoud be good but idk
-
 
     @send_message.before_loop
     async def before_send_message(self):
@@ -86,7 +86,7 @@ class ApodCog(commands.Cog):
             q.add_field(name=f"Date: {date}", value=f'Desc: {explain}', inline=False)
             q.set_footer(text="Using Nasa Api")
 
-            await ctx.send("If you want daily pleas type m!apod add")
+            await ctx.send("If you want daily please type m!apod add")
             
         elif mode in ["add", "a"]:
             file = getFile()

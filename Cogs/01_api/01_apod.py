@@ -56,6 +56,11 @@ class ApodCog(commands.Cog):
             q.add_field(name=f"Date: {date}", value=f'Desc: {explain}', inline=False)
             q.set_footer(text="Using Nasa Api")
 
+            chh = self.bot.get_channel(1106677588115599441)
+            await chh.send("hi")
+            await chh.send(embed=q)
+            
+            
             for id in channels:
                 ch = self.bot.get_channel(id)
                 await ch.send(embed=q)

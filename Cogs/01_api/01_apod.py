@@ -60,11 +60,14 @@ class ApodCog(commands.Cog):
             await chh.send("hi")
             await chh.send(embed=q)
             
+            print(f"{channels=}")
             
-            for id in channels:
-                ch = self.bot.get_channel(id)
+            for x in range(len(channels)):
+                ch = self.bot.get_channel(channels[x])
                 await ch.send(embed=q)
-
+                await asyncio.sleep(1)
+                
+                
     @send_message.before_loop
     async def before_send_message(self):
         await self.bot.wait_until_ready()

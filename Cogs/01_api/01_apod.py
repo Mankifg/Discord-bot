@@ -36,9 +36,7 @@ class ApodCog(commands.Cog):
         self.send_message.start()
     @tasks.loop(seconds=59)
     async def send_message(self):
-        print("cycle")
         if datetime.now().hour == 8 and datetime.now().minute == 0:
-            print("aa")
             channels = getFile()["apod"]["ids"]
             resp = requests.get(f"{website}?api_key={key}").json()
             author = resp.get("copyright", "n/a")

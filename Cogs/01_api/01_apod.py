@@ -10,7 +10,7 @@ import urllib.request
 import asyncio
 from datetime import datetime
 
-website = "https://api.nasa.gov/planetary/apod"
+WEBSITE = "https://api.nasa.gov/planetary/apod"
 path_to_img = "./data/Photos/apod.png"
 
 load_dotenv(find_dotenv())
@@ -38,7 +38,7 @@ class ApodCog(commands.Cog):
     async def send_message(self):
         if datetime.now().hour == 8 and datetime.now().minute == 0:
             channels = getFile()["apod"]["ids"]
-            resp = requests.get(f"{website}?api_key={key}").json()
+            resp = requests.get(f"{WEBSITE}?api_key={key}").json()
             author = resp.get("copyright", "n/a")
             date = resp.get("date","1.1.1970")
             explain = resp.get("explanation","n/a")
@@ -70,7 +70,7 @@ class ApodCog(commands.Cog):
         mode = mode.lower()
         if mode in ["show", "s"]:
             #! If user wants the image
-            resp = requests.get(f"{website}?api_key={key}").json()
+            resp = requests.get(f"{WEBSITE}?api_key={key}").json()
             author = resp.get("copyright", "n/a")
             date = resp.get("date","1.1.1970")
             explain = resp.get("explanation","n/a")

@@ -8,3 +8,5 @@ services:
     environment:
       - TOKEN=${TOKEN}
       - NASA=${NASA}
+      - SUPA_URL=${SUPA_URL}
+      - SUPA_KEY=${SUPA_KEY}

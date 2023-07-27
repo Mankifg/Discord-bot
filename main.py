@@ -7,6 +7,10 @@ from itertools import cycle
 from dotenv import load_dotenv
 import discord
 import startup
+import time
+import discord
+from discord.ext import commands
+from discord_slash import SlashCommand, SlashContext
 
 
 load_dotenv()
@@ -37,12 +41,14 @@ class Greetings(commands.Cog):
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(
-    command_prefix=prefix,
+   command_prefix=commands.when_mentioned_or("m!"),
     help_command=None,
     description="Mankifg's discord bot.",
     intents=intents,
     owner_id=owner_id,
 )
+
+slash = SlashCommand(bot, sync_commands=True)
 
 if __name__ == '__main__':
     for path in Path('./Cogs').rglob('*.py'):

@@ -5,12 +5,10 @@ import json
 import os
 from itertools import cycle
 from dotenv import load_dotenv
-import discord
 import startup
 import time
 import discord
 from discord.ext import commands
-from discord_slash import SlashCommand, SlashContext
 
 
 load_dotenv()

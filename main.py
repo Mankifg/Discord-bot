@@ -46,7 +46,6 @@ bot = commands.Bot(
     owner_id=owner_id,
 )
 
-slash = SlashCommand(bot, sync_commands=True)
 
 if __name__ == '__main__':
     for path in Path('./Cogs').rglob('*.py'):

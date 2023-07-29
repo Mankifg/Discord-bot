@@ -7,11 +7,6 @@ import supabase
 
 import eco
 
-url: str = os.environ.get("SUPA_URL")
-key: str = os.environ.get("SUPA_KEY")
-
-supabase: Client = create_client(url, key)
-
 class sudoCog(commands.Cog, name="sudo command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot

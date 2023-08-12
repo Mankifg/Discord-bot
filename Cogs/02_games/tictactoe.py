@@ -1,8 +1,14 @@
 import discord
 from discord.ext import commands
 import asyncio
+from discord.ui import Button,View
 
-igralci = ["O", "X"]
+igralci = ["X", "O"]
+
+P1 = "\N{Regional Indicator Symbol Letter X}"
+P2 = "\N{Regional Indicator Symbol Letter O}"
+EMPTY ="\N{white large square}"
+
 
 numbers = {1:"1️⃣", 2:"2️⃣", 3:"3️⃣", 4:"4️⃣", 5:"5️⃣", 6:"6️⃣", 7:"7️⃣", 8:"8️⃣", 9:"9️⃣"}
 
@@ -119,14 +125,152 @@ def make_board(board):
 
     return ret
 
+def prepare_board(board):
+    return board
+
+class DuelView(discord.ui.View):
+    def __init__(self,idd):
+        super().__init__()
+        self.value = None
+        self.id = int(idd)
+        
+    @discord.ui.button(label="Accept Duel", row=0, style=discord.ButtonStyle.green)
+    async def button1(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = True
+            self.stop()
+            
+    @discord.ui.button(label="Decline Duel", row=0, style=discord.ButtonStyle.danger)
+    async def button2(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = False
+            self.stop()
+            
+class GameView(discord.ui.View):
+    def __init__(self,idd,board,player1):
+        super().__init__()
+        self.value = None
+        self.id = int(idd)
+        self.board = board
+        
+        
+        
+        # [[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]
+        
+    
+        emojify = []
+        toggles = []
+        
+        for a in range(len(self.board)):
+            for b in range(len(self.board[a])):
+                curr = self.board[a][b]
+                if curr == " ":
+                    toggles.append(False)
+                else:
+                    toggles.append(True)
+                    
+                if curr == "X":
+                    emojify.append(P1)
+                elif curr == "O":
+                    emojify.append(P2)
+                else:
+                    emojify.append(EMPTY)
+
+        if not player1:
+            self.button1 = discord.ButtonStyle.green
+            self.button2 = discord.ButtonStyle.green
+            self.button3 = discord.ButtonStyle.green
+            self.button4 = discord.ButtonStyle.green
+            self.button5 = discord.ButtonStyle.green
+            self.button6 = discord.ButtonStyle.green
+            self.button7 = discord.ButtonStyle.green
+            self.button8 = discord.ButtonStyle.green
+            self.button9 = discord.ButtonStyle.green
+
+        self.button1.disabled = toggles[0]
+        self.button2.disabled = toggles[1]
+        self.button3.disabled = toggles[2]
+        self.button4.disabled = toggles[3]
+        self.button5.disabled = toggles[4]
+        self.button6.disabled = toggles[5]
+        self.button7.disabled = toggles[6]
+        self.button8.disabled = toggles[7]
+        self.button9.disabled = toggles[8]
+        
+        self.button1.emoji = emojify[0]
+        self.button2.emoji = emojify[1]
+        self.button3.emoji = emojify[2]
+        self.button4.emoji = emojify[3]
+        self.button5.emoji = emojify[4]
+        self.button6.emoji = emojify[5]
+        self.button7.emoji = emojify[6]
+        self.button8.emoji = emojify[7]
+        self.button9.emoji = emojify[8]
+            
+    @discord.ui.button(row=0, style=discord.ButtonStyle.primary)
+    async def button1(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = 1
+            self.stop()
+            
+    @discord.ui.button(row=0, style=discord.ButtonStyle.primary)
+    async def button2(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = 2
+            self.stop()
+            
+    @discord.ui.button(row=0, style=discord.ButtonStyle.primary)
+    async def button3(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = 3
+            self.stop()
+            
+    @discord.ui.button(row=1, style=discord.ButtonStyle.primary)
+    async def button4(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = 4
+            self.stop()
+            
+    @discord.ui.button(row=1, style=discord.ButtonStyle.primary)
+    async def button5(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = 5
+            self.stop()
+            
+    @discord.ui.button(row=1, style=discord.ButtonStyle.primary)
+    async def button6(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = 6
+            self.stop()
+            
+    @discord.ui.button(row=2, style=discord.ButtonStyle.primary)
+    async def button7(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = 7
+            self.stop()
+            
+    @discord.ui.button(row=2, style=discord.ButtonStyle.primary)
+    async def button8(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = 8
+            self.stop()
+            
+    @discord.ui.button(row=2, style=discord.ButtonStyle.primary)
+    async def button9(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = 9
+            self.stop()
+            
+    
+            
+#Just pass disabled=True to discord.ui.button()
 
 class tictactoeCog(commands.Cog, name="ttt command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 
-    @commands.command(name="tictactoe", usage="", description="wip", aliases=["ttt"])
-    @commands.cooldown(1, 2, commands.BucketType.member)
-    async def tictactoe(self, ctx, member: discord.Member = None):
+    @discord.command(name="tictactoe", usage="", description="wip", aliases=["ttt"])
+    async def tictactoe(self, ctx:discord.ApplicationContext, member: discord.Member = None):
         global numbers
 
         gamming = True
@@ -135,6 +279,7 @@ class tictactoeCog(commands.Cog, name="ttt command"):
         username = ctx.author.name
 
         board = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
+        
         if member == None:
             #! player vs computer
             while gamming:
@@ -241,9 +386,9 @@ class tictactoeCog(commands.Cog, name="ttt command"):
 
         else:
             #! player vs player
-
+            
             players = [ctx.author, member]
-
+            
             q = discord.Embed(
                 title="Tic Tac Toe Duel",
                 description=f"{players[0].name} vs {players[1].name}",
@@ -256,98 +401,72 @@ class tictactoeCog(commands.Cog, name="ttt command"):
             )
             q.add_field(name="Challenged: ", value=f"**```{players[1].name}```**", inline=False)
 
-            bsend = await ctx.send(embed=q)
-            await bsend.add_reaction(yes)
-            await bsend.add_reaction(no)
+            dview = DuelView(member.id)
 
-            try:
-                reaction, user = await self.bot.wait_for(
-                    "reaction_add",
-                    check=lambda reaction, user: user == players[1]
-                    and (reaction.emoji == yes or reaction.emoji == no),
-                    timeout=30.0,
-                )
-
-            except asyncio.TimeoutError:
-                await ctx.send(f"**{players[1].name}** rejected duel!")
-                gamming = False
-            
-            else :
-                if (reaction.emoji == no) :
-                    await ctx.send(f"**{players[1].name}** rejected duel!")
-                    return
-
+            await ctx.respond(embed=q, view=dview)
+        
+            await dview.wait()
+            print(dview.value)
+            #! Declined or time limit exced 
+            if not dview.value or dview.value == None:
+                q = discord.Embed(title=f"{players[1].name} declined duel",
+                    description=f"",
+                    color=discord.Color.red())
+                
+                await ctx.send(embed=q)
+                return
+    
             while gamming:
                 for x in range(len(players)):
+                    
                     good_answer = False
-                    while not good_answer:
+                    
+                    
 
-                        if x == 0:
-                            q = discord.Embed(
-                                title="Tic Tac Toe",
-                                description="",
-                                color=discord.Color.red(),
-                            )
-                        else:
-                            q = discord.Embed(
-                                title="Tic Tac Toe",
-                                description="",
-                                color=discord.Color.blue(),
-                            )
-                        q.set_author(
-                            name=players[x].name, icon_url=players[x].avatar.url
+                    #? color for each player
+                    
+                    if x == 0:
+                        q = discord.Embed(
+                            title="Tic Tac Toe",
+                            description="",
+                            color=discord.Color.blue(),
                         )
-                        q.add_field(
-                            name="Board: ",
-                            value=f"**```{make_board(board)}```**",
-                            inline=False,
+                    else:
+                        q = discord.Embed(
+                            title="Tic Tac Toe",
+                            description="",
+                            color=discord.Color.green(),
                         )
-
-                        bsend = await ctx.send(embed=q)
-                        for key in numbers.keys():
-                            await bsend.add_reaction(numbers[key])
                         
-                        await bsend.add_reaction(leave)
+                    q.set_author(name=players[x].name)
+                    
+                    q.add_field(
+                        name="Board: ",
+                        value=f"**```{make_board(board)}```**",
+                        inline=False,
+                    )
+                    
+                    player1 = x == 0
+                    
+                    game_view = GameView(players[0].id,board,player1)
+                    
+                    
+                    bsend = await ctx.respond(embed=q, view=game_view)
+                    
+                    await game_view.wait()
 
-                        try:
-                            reaction, user = await self.bot.wait_for(
-                                "reaction_add",
-                                check=lambda reaction, user: user == players[x]
-                                and (reaction.emoji in numbers.values() or reaction.emoji == leave),
-                                timeout=30.0,
-                            )
+    
+                    place = game_view.value
 
-                        except asyncio.TimeoutError:
-                            await ctx.send(f"{players[x].name} left game **what a loser**!")
-                            gamming = False
+                    print(place)
 
-                        else:
-                            if reaction.emoji == leave:
-                                await ctx.send(f"{players[x].name} left game **what a loser**!")
-                                numbers = {1:"1️⃣", 2:"2️⃣", 3:"3️⃣", 4:"4️⃣", 5:"5️⃣", 6:"6️⃣", 7:"7️⃣", 8:"8️⃣", 9:"9️⃣"}
-                                return 0
-                            
-                            found_place = False
-                            for key in numbers.keys():
-                                if reaction.emoji == numbers[key]:
-                                    found_place = True
-                                    place = key - 1
 
-                            if not found_place:
-                                await ctx.send("Invalid place")
-                                numbers = {1:"1️⃣", 2:"2️⃣", 3:"3️⃣", 4:"4️⃣", 5:"5️⃣", 6:"6️⃣", 7:"7️⃣", 8:"8️⃣", 9:"9️⃣"}
-                                return 0
 
-                            j = int(place % 3)
-                            i = int(place / 3)
-
-                            if board[i][j] == " ":
-                                board[i][j] = igralci[x]
-                                good_answer = True
-                                del numbers[place + 1]
-                                break
-                            else:
-                                continue
+                    j = int(place % 3)
+                    i = int(place / 3)
+                    
+                    board[i][j] = igralci[x]
+                    
 
                     ocena = oceniPolozaj(board)
 

@@ -1,24 +1,46 @@
 import discord
 from discord.ext import commands
+import discord
+import discord
+from discord.ui import Button,View
+from discord.ext import commands
+import time
 
 
-class ButtonRoleCog(commands.Cog):
-    """
-    A cog with a slash command for posting the message with buttons
-    and to initialize the view again when the bot is restarted.
-    """
+class MyView(discord.ui.View,):
+    
+    def __init__(self,idd):
+        super().__init__()
+        self.value = None
+        self.id = int(idd)
+    
+    @discord.ui.button(label="Accept", row=0, style=discord.ButtonStyle.primary)
+    async def button1(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = True
+            self.stop() # this is the view.stop
 
+
+    @discord.ui.button(label="Decline", row=1, style=discord.ButtonStyle.primary)
+    async def button2(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = False
+            self.stop() # this is the view.stop
+
+class ButtonCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+    @discord.command(name="hello",description="")
+    async def hello(self,ctx:discord.ApplicationContext):
+        view = MyView(650756055390879757)
+    
+        await ctx.respond('choose', view=view)
+        
+        await view.wait()
 
-    @commands.message_command(name="Show ID")  # Creates a global message command
-    async def show_id(
-        ctx: discord.ApplicationContext, message: discord.Message
-    ):  # Message commands give a message param
-        await ctx.respond(f"{ctx.author.name}, here's the message id: {message.id}!")
+        print(view.value)
+        
 
-
+            
 def setup(bot):
-    bot.add_cog(ButtonRoleCog(bot))
-
-
+    bot.add_cog(ButtonCog(bot))

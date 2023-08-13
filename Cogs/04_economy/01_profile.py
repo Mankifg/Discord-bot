@@ -46,25 +46,23 @@ class profileCog(commands.Cog, name="profile command"):
 
         eco.create_account(id)
         user_data = eco.get_user_data(id)
-        print(f"{user_data=}")
         
         q = discord.Embed(title=f"{userObj.name.title()}'s profile")
                         
         q.add_field(name="Purse", value=user_data['money'], inline=True)
         q.add_field(name="Bank", value=user_data['bank'], inline=True)
         items = user_data["backpack"]["items"]
-        q.add_field(name="# of items", value=len(items), inline=False)
-        valuable = sorted(items, key=lambda x:x['value'], reverse=True)[:2]
+        valuable = sorted(items, key=lambda x:x['value'], reverse=True)#[:2]
         d = []
-        [d.append(item['name']) for item in valuable]
+        [d.append(item['name'].title()) for item in valuable]
         s = ""
         for i in range (5):
             try:
                 s+=f"**{d[i]}**, "
             except IndexError:
-                print("*")
-        q.add_field(name="Valuable items", value=s[:-2], inline=True)
+                pass
         timestamp = user_data['data']['date_joined']
+        q.add_field(name=f"Items: {len(items)}", value=f"{s[:-2]}.", inline=False)
         q.add_field(name="Joined", value=f"<t:{timestamp}:R>, <t:{timestamp}:f>", inline=False)
 
         await ctx.send(embed=q)

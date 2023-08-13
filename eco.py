@@ -15,6 +15,8 @@ supabase: Client = create_client(url, key)
 
 TABLE = "main"
 FIX_LEN = 30
+TABLE2 = "vars"
+
 
 def get_bank_data():
     response = supabase.table(TABLE).select("*").execute()
@@ -59,3 +61,11 @@ def get_user_data(id):
 
 def save_user_data(user_data):
     response = supabase.table(TABLE).update(user_data).eq('user_id', user_data["user_id"]).execute()
+    
+def load_second_table_idd(idd):
+    query = supabase.from_(TABLE2).select('*', count='exact').eq('id', idd)
+    result = dict(query.execute())
+    return result.get('data')[0] 
+
+def save_second_table_idd(data):
+    response = supabase.table(TABLE2).update(data).eq('id', data["id"]).execute()

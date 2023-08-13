@@ -6,6 +6,7 @@ from discord.ui import Button,View
 from discord.ext import commands
 import time
 
+from functions import get_color_from_member 
 
 class MyView(discord.ui.View,):
     
@@ -39,6 +40,11 @@ class ButtonCog(commands.Cog):
         await view.wait()
 
         print(view.value)
+        
+    @commands.command(name="color",description="")
+    async def color(self,ctx):
+        print(ctx.author.id)
+        c = get_color_from_member(ctx.author)
         
 
             

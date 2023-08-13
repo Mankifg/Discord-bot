@@ -4,6 +4,9 @@ from functions import *
 import os
 from supabase import create_client, Client
 import supabase
+from datetime import datetime as dt
+
+
 
 url: str = os.environ.get("SUPA_URL")
 key: str = os.environ.get("SUPA_KEY")
@@ -37,7 +40,12 @@ def create_account(id):
             "user_id": id,
             "money": 0,
             "bank": 0,
-            "backpack": {},
+            "backpack": {
+            "items":[{"name":"banana","value":1}]
+            },
+            "data":{
+              "date_joined" : int(dt.timestamp(dt.now())),
+            },
         }
         response = supabase.from_(TABLE).insert(data).execute()
         return False

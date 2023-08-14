@@ -43,7 +43,7 @@ def create_account(id):
             "money": 0,
             "bank": 0,
             "backpack": {
-            "items":[{"name":"banana","value":1}]
+            "items":[]
             },
             "data":{
               "date_joined" : int(dt.timestamp(dt.now())),

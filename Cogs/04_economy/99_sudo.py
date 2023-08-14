@@ -24,6 +24,12 @@ class MyModal(discord.ui.Modal):
     async def callback(self, interaction: discord.Interaction):
         embed = discord.Embed(title="Created new item")
         
+        if int(self.children[1].value) < 1:
+            embed= discord.Embed(title="Error", description="Value must be greater than 0",color=discord.Color.red())
+            await interaction.response.send_message(embeds=[embed])
+            return
+
+        
         max_id = 0
         data = eco.load_second_table_idd(1)
         for item in data["data"]:
@@ -64,12 +70,11 @@ class sudoCog(commands.Cog, name="sudo command"):
     @discord.command(name="create", usage="", description="")
     async def create(self, ctx):
         if not ctx.author.id in cool_guys:
-            q = discord.Embed("Missing permissinon to create items.",color=discord.Color.red())
+            q = discord.Embed(title="Missing permissinon to create items.",color=discord.Color.red())
+            await ctx.send(embed=q)
             return
         
-        
-        
-        modal = MyModal(title="Modal via Slash Command")
+        modal = MyModal(title="Making a new item")
         
         await ctx.send_modal(modal)
     

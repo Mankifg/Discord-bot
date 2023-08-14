@@ -17,7 +17,7 @@ class givememoneyyCog(commands.Cog, name="givememoneyy command"):
         self.bot = bot
 
     @commands.command(name="givememoneyy", usage="", description="")
-    @commands.cooldown(1, 2, commands.BucketType.member)
+    @commands.cooldown(1, 30, commands.BucketType.member)
     async def givememoneyy(self, ctx):
 
         userObj = ctx.author

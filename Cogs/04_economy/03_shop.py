@@ -10,37 +10,47 @@ class shopCog(commands.Cog, name="shop commands"):
 
     @commands.command(name="buy", usage="", description="")
     @commands.cooldown(1, 2, commands.BucketType.member)
-    async def buy(self, ctx, name, value):
+    async def buy(self, ctx, name):
         
-        try:
-            value = int(value)
-        except:
-            print("int err")
-            return
-        userObj = ctx.author
-        id = userObj.id
+        id = ctx.author.id
 
         eco.create_account(id)
         user_data = eco.get_user_data(id)
 
+        #? check if in db
+        item_data = eco.load_second_table_idd(1)
         
-
-        if user_data['money']<value:
-            q = discord.Embed(title=f"You don't have enough money to buy {name} for {value}.",
-                              description=f"you need {value-user_data['money']} more",
+        name = name.lower()
+        
+        item_json = None
+        for item in item_data["data"]:
+            if item["name"] == name or str(item["id"]) == name:
+                item_json = item
+           
+        if item_json == None:
+            q = discord.Embed(title=f"The item named: {name} was not found.",
+                              description="Use `/display`",color=discord.Color.red())
+            await ctx.send(embed=q)
+            return
+        
+    
+        if user_data['money']<item_json["value"]:
+            q = discord.Embed(title=f"You don't have enough money to buy {item_json['name']} for {item_json['value']}.",
+                              description=f"you need {item_json['value']-user_data['money']} more",
                               color=discord.Color.red())
             await ctx.send(embed=q)
             return
-                
-        item_json = {"name": name, "value": value}
-            
+        
+        print(item_json)
         user_data['backpack']['items'].append(item_json)
 
-        user_data['money'] -= value
+
+        user_data['money'] -= item_json['value']
 
         eco.save_user_data(user_data)
+
         
-        q = discord.Embed(title=f"You successfully purchased {name} for {value}",
+        q = discord.Embed(title=f"You successfully purchased {name} for {item_json['value']}",
                               description=f"Now you have only {user_data['money']}",
                               color=discord.Color.green())
         
@@ -48,15 +58,9 @@ class shopCog(commands.Cog, name="shop commands"):
             
     @commands.command(name="sell", usage="", description="")
     @commands.cooldown(1, 2, commands.BucketType.member)       
-    async def sell(self, ctx, name, value):
-        #? (r)  ®p1fl4r
-        try:
-            value = int(value)
-        except:
-            print("int err")
-            return
-        userObj = ctx.author
-        id = userObj.id
+    async def sell(self, ctx, name ):
+
+        id = ctx.author.id
 
         eco.create_account(id)
         user_data = eco.get_user_data(id)
@@ -68,19 +72,13 @@ class shopCog(commands.Cog, name="shop commands"):
             await ctx.send(embed=q)
             return
          
-            
-        """for i in range(len(user_data['backpack']['items'])):
-            if user_data['backpack']['items'][i]['name'] == name:
-                index = i
-                
-        if """
-        before = len(user_data['backpack']['items'])    
-    
-        user_data['backpack']['items'] = [item for item in user_data['backpack']['items'] if item['name'] != name]
 
-        after = len(user_data['backpack']['items'])
-        
-        user_data['money'] += value*(before-after)
+        for item in user_data['backpack']['items']:
+            if item['name'] == name or str(item["id"]) == name:
+                value = int(item["value"] * item["sell"])
+                user_data['backpack']['items'].remove(item)
+                user_data['money'] -= value
+                break
 
         eco.save_user_data(user_data)
         

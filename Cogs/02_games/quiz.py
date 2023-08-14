@@ -14,31 +14,7 @@ qtc = ["multiple", "boolean"]
 quiz_url = "https://opentdb.com/api.php?amount=1"
 category_url = "https://opentdb.com/api_category.php"
 
-yes = "✅"
-no = "❌"
-leave = "🌑"
 
-
-numbers = ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
-
-zero = numbers[0]
-one = numbers[1]
-two = numbers[2]
-three = numbers[3]
-four = numbers[4]
-five = numbers[5]
-six = numbers[6]
-seven = numbers[7]
-eight = numbers[8]
-nine = numbers[9]
-
-
-'''
-fot.append("Powered by OpenTDB.com | Made by Mankifg#1810")
-fot.append(
-    "If the answers are wrong, donit blame me. Blame OpenTDB.com. | Made by Mankifg#1810"
-)
-'''
 special = []
 with open(f"./data/special.txt", mode="r", encoding="utf-8") as f:
     special = f.read().splitlines()
@@ -51,6 +27,54 @@ for i, v in enumerate(special):
     a.append(hold[0])
     b.append(hold[1])
 
+class TrueFalseView(discord.ui.View):
+    def __init__(self,idd):
+        super().__init__()
+        self.value = None
+        self.id = int(idd)
+        
+    @discord.ui.button(label="Accept Duel", row=0, style=discord.ButtonStyle.green)
+    async def button1(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = True
+            self.stop()
+            
+    @discord.ui.button(label="Decline Duel", row=0, style=discord.ButtonStyle.danger)
+    async def button2(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = False
+            self.stop()
+
+
+class FourView(discord.ui.View):
+    def __init__(self,idd):
+        super().__init__()
+        self.value = None
+        self.id = int(idd)
+        
+    @discord.ui.button(label="1", row=0, style=discord.ButtonStyle.primary)
+    async def button1(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = 1
+            self.stop()
+            
+    @discord.ui.button(label="2", row=0, style=discord.ButtonStyle.primary)
+    async def button1(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = 2
+            self.stop()
+            
+    @discord.ui.button(label="3", row=0, style=discord.ButtonStyle.primary)
+    async def button1(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = 3
+            self.stop()
+            
+    @discord.ui.button(label="4", row=0, style=discord.ButtonStyle.primary)
+    async def button1(self, select: discord.ui.Select, interaction: discord.Interaction):
+        if interaction.user.id == self.id:
+            self.value = 4
+            self.stop()
 
 class QuizCog(commands.Cog, name="quiz command"):
     def __init__(self, bot: commands.bot):
@@ -83,7 +107,7 @@ class QuizCog(commands.Cog, name="quiz command"):
 
                 q = discord.Embed(title="Invalid category", color=discord.Color.red())
                 q.add_field(name="Valid categories", value=ret)
-                q.set_footer(text=functions.get_footer())
+
 
                 await ctx.send(embed=q)
 
@@ -94,8 +118,6 @@ class QuizCog(commands.Cog, name="quiz command"):
             if not ttype in qttype:
                 q = discord.Embed(title="Invalid type", color=discord.Color.red())
                 q.add_field(name="Valid types", value="m - multiple\ntf - true/false")
-                q.set_footer(text=functions.get_footer())
-
                 await ctx.send(embed=q)
 
                 return
@@ -113,7 +135,7 @@ class QuizCog(commands.Cog, name="quiz command"):
 
             resp = resp["results"]
 
-            q = discord.Embed(title="Quiz", desciption="", color=discord.Color.blue())
+            q = discord.Embed(title="Quiz", description="", color=discord.Color.blue())
             q.add_field(name="Category", value=resp[0]["category"], inline=True)
             q.add_field(name="Level of Difficulty", value=resp[0]["difficulty"])
             q.add_field(name="Type", value=resp[0]["type"])

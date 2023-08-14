@@ -1,5 +1,8 @@
 # Discord-bot
-A multi purpuse discord bot cappabe of many commands. It uses some api and preform mosty interactive actions. It also include some classic games like: hangman, wordle, tictactoe (vs computer or player).
+A multi purpuse discord bot cappabe of many commands. It uses some APIs and preforms mostly interactive actions. It also includes some classic games:
+* hangman,
+* wordle,
+* tictactoe (vs computer or player).
 
 # .ENV structure
 

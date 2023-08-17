@@ -35,7 +35,7 @@ class profileCog(commands.Cog, name="bank commands"):
         
         if user_data['money'] < value:
             q = discord.Embed(title=f"You're too poor", description=f"You need {value-user_data['money']} more", color=discord.Color.red())
-            await ctx.send(embed=q)
+            await ctx.respond(embed=q)
             return
 
 
@@ -54,7 +54,7 @@ class profileCog(commands.Cog, name="bank commands"):
 
     @discord.command(name="withdraw", usage="", description="Withdraw money from your bank", alias=["w"])
     @commands.cooldown(1, 2, commands.BucketType.member)
-    async def withdraw(self, ctx, value):
+    async def withdraw(self, ctx, value: discord.Option(int, description="How much to withdraw", min_value=1,required=True)):
         try:
             value = int(value)
         except:
@@ -79,7 +79,7 @@ class profileCog(commands.Cog, name="bank commands"):
         
         if user_data['bank'] < value:
             q = discord.Embed(title=f"You're too poor", description=f"You need {value-user_data['bank']} more", color=discord.Color.red())
-            await ctx.send(embed=q)
+            await ctx.respond(embed=q)
             return
 
 
@@ -93,7 +93,7 @@ class profileCog(commands.Cog, name="bank commands"):
         
         eco.save_user_data(user_data)
             
-        await ctx.send(embed=q)
+        await ctx.respond(embed=q)
         
 
 def setup(bot: commands.Bot):

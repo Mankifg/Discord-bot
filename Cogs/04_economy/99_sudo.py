@@ -13,6 +13,7 @@ from discord.ext import commands
 import time
 
 import eco
+items = [item2['name'] for item2 in eco.load_second_table_idd(1)['data']]
 
 class MyModal(discord.ui.Modal): # create
     def __init__(self, *args, **kwargs) -> None:
@@ -128,31 +129,20 @@ class sudoCog(commands.Cog, name="admin commands"):
         
         await ctx.send_modal(modal)
     
-
-    #//@discord.command(name="delete", usage="", description="Create new item")
-    """def get_animal_types(ctx: discord.AutocompleteContext):
-        print(ctx)
-        animal_type = ctx.options['animal_type']
-        if animal_type == 'Marine':
-            return ['Whale', 'Shark', 'Fish', 'Octopus', 'Turtle']
-        else: # is land animal
-            return ['Snake', 'Wolf', 'Lizard', 'Lion', 'Bird']
-
-    @discord.slash_command(name="animal", description="Pick animal")
-    async def animal_command(
-        ctx: discord.ApplicationContext,
-        animal_type: discord.Option(str, choices=['Marine', 'Land'], description="Pick animal type"),
-        animal: discord.Option(str, autocomplete=discord.utils.basic_autocomplete(get_animal_types))
-        ):
-        await ctx.respond(f'You picked an animal type of `{animal_type}` that led you to pick `{animal}`!')
-    """
-
+    #todo fix refreshing 
     @discord.command(name="delete", usage="", description="Delete item")
     async def delete(self,
         ctx: discord.ApplicationContext,
-        item: discord.Option(str, choices=[], description="Pick item to delete"),
+        item: discord.Option(str, choices=items, description="Pick item to delete"),
     ):
-        await ctx.respond(f"Item deleted!")
+        table = eco.load_second_table_idd(1)['data']
+        data = eco.load_second_table_idd(1)
+        newtable = [item2 for item2 in table if item2['name'] != item]
+        data['data']= newtable
+        eco.save_second_table_idd(data)
+        await ctx.respond("Item deleted!")       
+        items = [item2['name'] for item2 in eco.load_second_table_idd(1)['data']]
+        print(items)
 
 def setup(bot: commands.Bot):
     bot.add_cog(sudoCog(bot))

@@ -8,15 +8,15 @@ class profileCog(commands.Cog, name="bank commands"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 
-    @commands.command(name="deposit", usage="", description="", alias=["d"])
+    @discord.command(name="deposit", usage="", description="Deposit money onto bank acconunt", alias=["d"])
     @commands.cooldown(1, 2, commands.BucketType.member)
-    async def deposit(self, ctx, value):
+    async def deposit(self, ctx, value: discord.Option(int, description="How much to deposit", min_value=1,required=True)):
         try:
             value = int(value)
         except:
             q = discord.Embed(title=f"Invalid value", description=f"Learn to type numbers", color=discord.Color.red())
             await ctx.send(embed=q)
-            return
+            pass
         
         id = ctx.author.id
               
@@ -49,10 +49,10 @@ class profileCog(commands.Cog, name="bank commands"):
         
         eco.save_user_data(user_data)
             
-        await ctx.send(embed=q)
+        await ctx.respond(embed=q)
     
 
-    @commands.command(name="withdraw", usage="", description="", alias=["w"])
+    @discord.command(name="withdraw", usage="", description="Withdraw money from your bank", alias=["w"])
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def withdraw(self, ctx, value):
         try:

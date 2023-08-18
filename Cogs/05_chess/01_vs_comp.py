@@ -109,5 +109,48 @@ class chessCog(commands.Cog, name="chess command"):
                 last_good_move = move
 
 
+            if board.is_stalemate() or board.is_insufficient_material() or board.can_claim_threefold_repetition() or board.can_claim_fifty_moves() or board.can_claim_draw():
+                    
+                    r = "Draw"
+                    if board.can_claim_draw():
+                        r = "Draw"
+                    elif board.is_insufficient_material():
+                        r = "Insufficient material"
+                    elif board.can_claim_threefold_repetition():
+                        r = "Threefold repetition"
+                    elif board.can_claim_fifty_moves():
+                        r = "50 move rule"
+                    elif board.is_stalemate():
+                        r = "Stalemate"
+                        
+                    q = discord.Embed(title=r,color=discord.Color.gray())
+                    
+                    q.add_field(name=f"**{ctx.author.name}** vs ",value=f"**Stockfish**  {sf_version}, elo: {elo}")
+                    
+                    await ctx.send(embed=q)
+                
+                
+                # win lose detect 
+                 
+            outcome = None
+            try:    
+                outcome = board.outcome().result()
+            except AttributeError:
+                pass
+            
+            if not outcome == None:
+                if outcome == "1-0":
+                    q = discord.Embed(title="White wins",color=discord.Color(0xFFFFFF))
+                elif outcome == "0-1":    
+                    q = discord.Embed(title="Black wins")
+                elif outcome == "1/2-1/2":
+                    q = discord.Embed(title="Draw",color=discord.Color.gray())
+                    
+                    
+                q.add_field(name=f"**{ctx.author.name}** vs ",value=f"**Stockfish**  {sf_version}, elo: {elo}")
+                await ctx.send(embed=q)
+                
+                return
+
 def setup(bot: commands.Bot):
     bot.add_cog(chessCog(bot))

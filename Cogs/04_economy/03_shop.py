@@ -8,9 +8,9 @@ class shopCog(commands.Cog, name="shop commands"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 
-    @commands.command(name="buy", usage="", description="")
+    @discord.command(name="buy", usage="", description="Buy item")
     @commands.cooldown(1, 2, commands.BucketType.member)
-    async def buy(self, ctx, name):
+    async def buy(self, ctx, name: discord.Option(str, description="What to buy", required=True)):
         
         id = ctx.author.id
 
@@ -30,7 +30,7 @@ class shopCog(commands.Cog, name="shop commands"):
         if item_json == None:
             q = discord.Embed(title=f"The item named: {name} was not found.",
                               description="Use `/display`",color=discord.Color.red())
-            await ctx.send(embed=q)
+            await ctx.respond(embed=q)
             return
         
     
@@ -38,7 +38,7 @@ class shopCog(commands.Cog, name="shop commands"):
             q = discord.Embed(title=f"You don't have enough money to buy {item_json['name']} for {item_json['value']}.",
                               description=f"you need {item_json['value']-user_data['money']} more",
                               color=discord.Color.red())
-            await ctx.send(embed=q)
+            await ctx.respond(embed=q)
             return
         
         print(item_json)
@@ -54,11 +54,11 @@ class shopCog(commands.Cog, name="shop commands"):
                               description=f"Now you have only {user_data['money']}",
                               color=discord.Color.green())
         
-        await ctx.send(embed=q)
+        await ctx.respond(embed=q)
             
-    @commands.command(name="sell", usage="", description="")
+    @discord.command(name="sell", usage="", description="Prodaj")
     @commands.cooldown(1, 2, commands.BucketType.member)       
-    async def sell(self, ctx, name ):
+    async def sell(self, ctx, name: discord.Option(str, description="What to sell", required=True)):
 
         id = ctx.author.id
 
@@ -69,7 +69,7 @@ class shopCog(commands.Cog, name="shop commands"):
         if name not in list([item['name'] for item in user_data['backpack']['items']]):
             q = discord.Embed(title=f"You don't have {name} to sell it!",
                                 color=discord.Color.red())
-            await ctx.send(embed=q)
+            await ctx.respond(embed=q)
             return
          
 
@@ -86,7 +86,7 @@ class shopCog(commands.Cog, name="shop commands"):
                                 description=f"Now you have {user_data['money']}",
                                 color=discord.Color.green())
         
-        await ctx.send(embed=q)
+        await ctx.respond(embed=q)
         
 def setup(bot: commands.Bot):
     bot.add_cog(shopCog(bot))

@@ -130,9 +130,7 @@ class sudoCog(commands.Cog, name="admin commands"):
         await ctx.send_modal(modal)
     
 
-    def refresh():
-        return [item2['name'] for item2 in eco.load_second_table_idd(1)['data']]
-
+"""
     #todo fix refreshing 
     @discord.command(name="delete", usage="", description="Delete item")
     async def delete(self,
@@ -146,7 +144,7 @@ class sudoCog(commands.Cog, name="admin commands"):
         eco.save_second_table_idd(data)
         await ctx.respond("Item deleted!")       
         #items = [item2['name'] for item2 in eco.load_second_table_idd(1)['data']]
-        #print(items)
+        #print(items)"""
 
 def setup(bot: commands.Bot):
     bot.add_cog(sudoCog(bot))

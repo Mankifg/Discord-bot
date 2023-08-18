@@ -10,6 +10,7 @@ import time
 import discord
 from discord.ext import commands
 
+start_time = time.time()
 
 load_dotenv()
 token = os.getenv('TOKEN')
@@ -46,6 +47,7 @@ bot = commands.Bot(
     owner_id=owner_id,
 )
 
+setup_time = time.time()
 
 if __name__ == '__main__':
     for path in Path('./Cogs').rglob('*.py'):
@@ -56,10 +58,12 @@ if __name__ == '__main__':
         print(p)
         bot.load_extension(f"{p[:-3]}")
 
+boot_time = time.time()
 
 @bot.event
 async def on_ready():
     print(f"We have logged in as {bot.user}, id: {bot.user.id}")
+    print(start_time,setup_time,boot_time)
     status_swap.start()
 
 bot.run(token)

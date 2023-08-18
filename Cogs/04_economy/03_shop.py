@@ -56,7 +56,7 @@ class shopCog(commands.Cog, name="shop commands"):
         
         await ctx.respond(embed=q)
             
-    @discord.command(name="sell", usage="", description="Prodaj")
+    @discord.command(name="sell", usage="", description="Sell item")
     @commands.cooldown(1, 2, commands.BucketType.member)       
     async def sell(self, ctx, name: discord.Option(str, description="What to sell", required=True)):
 
@@ -77,7 +77,7 @@ class shopCog(commands.Cog, name="shop commands"):
             if item['name'] == name or str(item["id"]) == name:
                 value = int(item["value"] * item["sell"])
                 user_data['backpack']['items'].remove(item)
-                user_data['money'] -= value
+                user_data['money'] += value
                 break
 
         eco.save_user_data(user_data)

@@ -55,9 +55,9 @@ class chesCog(commands.Cog, name="ches command"):
         
 
 
-        q = discord.Embed(title="Tic Tac Toe Duel",color=discord.Color.blue(),)
-        q.add_field(name="Challenger: ", value=f"**```{ctx.author.name}```**",inline=False,)
-        q.add_field(name="Challenged: ", value=f"**```{member.name}```**", inline=False)
+        q = discord.Embed(title="Chess Game",color=discord.Color.blue(),)
+        q.add_field(name="White: ", value=f"**```{ctx.author.name}```**",inline=False,)
+        q.add_field(name="Black: ", value=f"**```{member.name}```**", inline=False)
 
         dview = DuelView(member.id)
 

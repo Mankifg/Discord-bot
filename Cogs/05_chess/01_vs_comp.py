@@ -69,7 +69,7 @@ class chessCog(commands.Cog, name="chess command"):
                 try:
                     msg = await self.bot.wait_for('message', check=lambda x: x.author.id == my_id,timeout=30)
                 except asyncio.TimeoutError:
-                    q = discord.Embed(title="You have timed out",color=discord.Color.red())
+                    q = discord.Embed(title="🚩🚩🚩 You have timed out 🚩🚩🚩",color=discord.Color.red())
                     await ctx.send(embed=q)
                     return
                         

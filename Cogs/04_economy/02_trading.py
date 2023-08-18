@@ -28,20 +28,20 @@ class tradingCog(commands.Cog, name="trading command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 
-    @commands.command(name="pay", usage=" @username", description="")
+    @discord.command(name="pay", usage=" @username", description="Make a transaction")
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def pay(self, ctx, second: discord.Member = None, amount:int = 0):
         #? if no1 is passed and amount is not set
         if second == None or amount == 0:
             q = discord.Embed(title="No user was supplied to pay.",color=discord.Color.red())
             q.add_field(name="Correct form",value="`/pay [user:mention] [amount:int]`")
-            await ctx.send(embed=q)
+            await ctx.respond(embed=q)
             return 
         
         #? prevent abubse
         if amount < 10:
             q = discord.Embed(title="You can't pay lower than 10 coins")
-            await ctx.send(embed=q)
+            await ctx.respond(embed=q)
             return
         
         my_id = ctx.author.id
@@ -50,7 +50,7 @@ class tradingCog(commands.Cog, name="trading command"):
         if my_id == your_id:
             q = discord.Embed(title="You can't pay yourself.",color=discord.Color.red())
             q.add_field(name="Pay someone else.",value="")
-            await ctx.send(embed=q)
+            await ctx.respond(embed=q)
             return
         
                
@@ -63,7 +63,7 @@ class tradingCog(commands.Cog, name="trading command"):
         #? too broke?
         if my_data["money"] < amount:
             q = discord.Embed(title="You don't have enough money to pay that much.",color=discord.Color.red())
-            await ctx.send(embed=q)
+            await ctx.respond(embed=q)
             return
         
         my_data["money"] = my_data["money"] - amount
@@ -77,15 +77,15 @@ class tradingCog(commands.Cog, name="trading command"):
         eco.save_user_data(your_data)
         
 
-        await ctx.send(embed=q)
+        await ctx.respond(embed=q)
         
-    @commands.command(name="trade", usage=" @username", description="")
+    @discord.command(name="trade", usage=" @username", description="Make a trade")
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def trade(self, ctx, second: discord.Member = None):
         if second == None:
             q = discord.Embed(title="No user was supplied to trade.",color=discord.Color.red())
             q.add_field(name="Correct form: ",value="`/trade [user:mention]`")
-            await ctx.send(embed=q)
+            await ctx.respond(embed=q)
             return 
         
         
@@ -97,28 +97,20 @@ class tradingCog(commands.Cog, name="trading command"):
         
         dview = DuelView(your_id)
 
-        send = await ctx.send(embed=q, view=dview)
+        respond = await ctx.respond(embed=q, view=dview)
 
         
         await dview.wait()
         
         if dview.value == None:
             q = discord.Embed(title="Trade",description="You have timed out.")
-            await send.edit(embed=q)
+            await respond.edit(embed=q)
             return 
 
         if not dview.value:
             q = discord.Embed(title="Trade",description="You have declined the trade.")
-            await ctx.send(embed=q)
+            await ctx.respond(embed=q)
             return
-        
-        
-        
-        
-        
-        
-        
-
                
         eco.create_account(my_id)
         eco.create_account(your_id)

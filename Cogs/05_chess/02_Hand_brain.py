@@ -90,37 +90,37 @@ class DuelView(discord.ui.View):
         self.children[5].disabled = not is_on[5]'''
         
     
-    @discord.ui.button(label="pawn", row=0, style=discord.ButtonStyle.primary,)
+    @discord.ui.button(label="Pawn | ♟", row=0, style=discord.ButtonStyle.primary,)
     async def button1(self, select: discord.ui.Select, interaction: discord.Interaction):
         if interaction.user.id == self.id:
             self.value = "p"
             self.stop()
             
-    @discord.ui.button(label="Horsi", row=0, style=discord.ButtonStyle.primary,disabled=False,)
+    @discord.ui.button(label="Horsi | ♞", row=0, style=discord.ButtonStyle.primary,disabled=False,)
     async def button2(self, select: discord.ui.Select, interaction: discord.Interaction):
         if interaction.user.id == self.id:
             self.value = "n"
             self.stop()     
             
-    @discord.ui.button(label="bishop boi", row=0, style=discord.ButtonStyle.primary,)
+    @discord.ui.button(label="Bishop | ♝", row=0, style=discord.ButtonStyle.primary,)
     async def button3(self, select: discord.ui.Select, interaction: discord.Interaction):
         if interaction.user.id == self.id:
             self.value = "b"
             self.stop()
             
-    @discord.ui.button(label="the roook", row=0, style=discord.ButtonStyle.primary,)
+    @discord.ui.button(label="Rook | ♜", row=0, style=discord.ButtonStyle.primary,)
     async def button4(self, select: discord.ui.Select, interaction: discord.Interaction):
         if interaction.user.id == self.id:
             self.value = "r"
             self.stop()
     
-    @discord.ui.button(label="queen", row=1, style=discord.ButtonStyle.primary,)
+    @discord.ui.button(label="Queen | ♛", row=1, style=discord.ButtonStyle.primary,)
     async def button5(self, select: discord.ui.Select, interaction: discord.Interaction):
         if interaction.user.id == self.id:
             self.value = "q"
             self.stop()
             
-    @discord.ui.button(label="king", row=1, style=discord.ButtonStyle.primary,)
+    @discord.ui.button(label="King | ♚", row=1, style=discord.ButtonStyle.primary,)
     async def button6(self, select: discord.ui.Select, interaction: discord.Interaction):
         if interaction.user.id == self.id:
             self.value = "k"
@@ -175,8 +175,7 @@ class chesshandCog(commands.Cog, name="chesshand command"):
                 q = discord.Embed(title="Chess | Pick piece")
                 urll = f"{base}?fen={fen}&color={color}&lastMove={last_good_move}&coordinates={coords}&size={size}&orientation={white_move}"
                 q.set_image(url=urll)
-                print(brain_obj.avatar)
-                q.set_author(name=brain_obj.name)#, icon_url=brain_obj.avatar)
+                q.set_author(name=brain_obj.name, icon_url=brain_obj.avatar)
                 q.add_field(name=f"**{white_hand.name}** / **{white_brain.name}** vs ",value=f"**{black_hand.name}** / **{black_brain.name}**")
                 
                 
@@ -194,16 +193,18 @@ class chesshandCog(commands.Cog, name="chesshand command"):
                     return
                 
                 table = {
-                    "p":"Pawn",
-                    "n":"Knight",
-                    "b":"Bishop",
-                    "r":"Rook",
-                    "q":"Queen",
-                    "k":"King",
+                    "p":"Pawn | ♟",
+                    "n":"Knight | ♞",
+                    "b":"Bishop | ♝",
+                    "r":"Rook | ♜",
+                    "q":"Queen | ♛",
+                    "k":"King | ♚",
                 }
                 
                 q = discord.Embed(title=f"{brain_obj.name} chossen **{table[val]}**")
                 q.add_field(name=f"{hand_obj.name} enter move",value=" ")
+                q.set_author(name=hand_obj.name, icon_url=hand_obj.avatar)
+                
                 await ctx.respond(embed=q)
                 
                 

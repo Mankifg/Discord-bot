@@ -63,7 +63,7 @@ boot_time = time.time()
 @bot.event
 async def on_ready():
     print(f"We have logged in as {bot.user}, id: {bot.user.id}")
-    print(start_time,setup_time,boot_time)
+    print(f"Setup time: {round((setup_time-start_time),4)} s,Start time: {round((boot_time-setup_time),4)} s")
     status_swap.start()
 
 bot.run(token)
